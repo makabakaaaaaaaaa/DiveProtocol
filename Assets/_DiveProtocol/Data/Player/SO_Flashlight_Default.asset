@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 695630944428aee469dfb7e1286fbe6a, type: 3}
+  m_Name: SO_Flashlight_Default
+  m_EditorClassIdentifier: 
+  _intensity: 16
+  _range: 24
+  _spotAngle: 80
+  _innerSpotAngle: 60
+  _color: {r: 1, g: 0.93, b: 0.82, a: 1}
+  _shadowType: 2
+  _shadowStrength: 1
+  _localPosition: {x: 0, y: 0.6, z: 0.15}
+  _localRotation: {x: 12, y: 0, z: 0}
+  _rotationSpeed: 720
+  _enableOnStart: 1
+  _allowToggle: 1
+  _toggleInput: 102
+  _debugGizmo: 1

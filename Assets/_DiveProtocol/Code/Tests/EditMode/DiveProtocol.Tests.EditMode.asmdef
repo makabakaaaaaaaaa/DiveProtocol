@@ -1,0 +1,23 @@
+{
+    "name": "DiveProtocol.Tests.EditMode",
+    "rootNamespace": "DiveProtocol.Tests.EditMode",
+    "references": [
+        "DiveProtocol.Runtime",
+        "DiveProtocol.Editor",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

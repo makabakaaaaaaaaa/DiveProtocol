@@ -1,0 +1,687 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb19b3659e591a04fa365f0b665ad930, type: 3}
+  m_Name: SO_L03_BlockoutConfig
+  m_EditorClassIdentifier: 
+  _lowerFloorY: 0
+  _upperFloorY: 4
+  _floorHeightDifference: 4
+  _wallHeight: 3
+  _wallThickness: 0.2
+  _floorThickness: 0.2
+  _doorWidth: 1.5
+  _doorHeight: 2.3
+  _stairWidth: 2.2
+  _stepHeight: 0.2
+  _stepDepth: 0.45
+  _balconyRailingHeight: 1.1
+  _upperFloorMaterial: {fileID: 2100000, guid: 5074a49456bb7fc40ab664e2b07a977a, type: 2}
+  _lowerFloorMaterial: {fileID: 2100000, guid: f37dec2d9880dfa45b52cddabc9bbff4, type: 2}
+  _stairsMaterial: {fileID: 2100000, guid: ce1c9a7ed4d7ea8438728ea14b4ee20b, type: 2}
+  _elevatorMaterial: {fileID: 2100000, guid: 688250d2b192c4a4dad0a2fdf5a29a31, type: 2}
+  _survivalGateMaterial: {fileID: 2100000, guid: 9a930a7aa5100134a8f26b6682b76256, type: 2}
+  _fuseMaterial: {fileID: 2100000, guid: ba48507fcb1abe046b5374ccca59e4dc, type: 2}
+  _balconyRailingMaterial: {fileID: 2100000, guid: 4135ad305f3797b4294e9cdc5e1c0d52, type: 2}
+  _rooms:
+  - _roomId: ROOM_01
+    _floorId: 1
+    _position: {x: 0, y: 4, z: 4}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 12
+    _length: 6
+    _height: 3
+    _generateFloor: 1
+    _generateWalls: 1
+    _openBalcony: 1
+    _openSide: 1
+    _containsStairOpening: 0
+  - _roomId: ROOM_02
+    _floorId: 1
+    _position: {x: -11, y: 4, z: 2}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 10
+    _length: 9
+    _height: 3
+    _generateFloor: 1
+    _generateWalls: 1
+    _openBalcony: 0
+    _openSide: 1
+    _containsStairOpening: 1
+  - _roomId: ROOM_03
+    _floorId: 0
+    _position: {x: -11, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 10
+    _length: 12
+    _height: 3
+    _generateFloor: 1
+    _generateWalls: 1
+    _openBalcony: 0
+    _openSide: 1
+    _containsStairOpening: 1
+  - _roomId: ROOM_04
+    _floorId: 0
+    _position: {x: 0, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 14
+    _length: 14
+    _height: 3
+    _generateFloor: 1
+    _generateWalls: 1
+    _openBalcony: 0
+    _openSide: 1
+    _containsStairOpening: 0
+  - _roomId: ROOM_05
+    _floorId: 0
+    _position: {x: 12, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 10
+    _length: 12
+    _height: 3
+    _generateFloor: 1
+    _generateWalls: 1
+    _openBalcony: 0
+    _openSide: 1
+    _containsStairOpening: 1
+  - _roomId: ROOM_06
+    _floorId: 1
+    _position: {x: 12, y: 4, z: 2}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 10
+    _length: 9
+    _height: 3
+    _generateFloor: 1
+    _generateWalls: 1
+    _openBalcony: 0
+    _openSide: 1
+    _containsStairOpening: 1
+  _doors:
+  - _doorId: D_R01_ELEVATOR
+    _fromRoomId: 
+    _toRoomId: ROOM_01
+    _doorType: 3
+    _position: {x: 0, y: 4, z: 7.2}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 2
+    _length: 0.5
+    _requiredKeyId: 
+    _unlockSideRoomId: 
+    _blockedSideRoomId: 
+    _afterUnlock: 0
+    _controlledBySurvivalTimer: 0
+    _unlockCondition: 
+  - _doorId: D_R01_R02
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_02
+    _doorType: 0
+    _position: {x: -6, y: 4, z: 3.8}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _unlockSideRoomId: 
+    _blockedSideRoomId: 
+    _afterUnlock: 0
+    _controlledBySurvivalTimer: 0
+    _unlockCondition: 
+  - _doorId: D_R03_R04
+    _fromRoomId: ROOM_03
+    _toRoomId: ROOM_04
+    _doorType: 0
+    _position: {x: -5.8, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _unlockSideRoomId: 
+    _blockedSideRoomId: 
+    _afterUnlock: 0
+    _controlledBySurvivalTimer: 0
+    _unlockCondition: 
+  - _doorId: D_SURVIVAL_R04_R05
+    _fromRoomId: ROOM_04
+    _toRoomId: ROOM_05
+    _doorType: 2
+    _position: {x: 7, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _unlockSideRoomId: 
+    _blockedSideRoomId: 
+    _afterUnlock: 1
+    _controlledBySurvivalTimer: 1
+    _unlockCondition: SurvivalTimerComplete
+  - _doorId: S01_R01_R06
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_06
+    _doorType: 1
+    _position: {x: 6, y: 4, z: 4.2}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _unlockSideRoomId: ROOM_06
+    _blockedSideRoomId: ROOM_01
+    _afterUnlock: 1
+    _controlledBySurvivalTimer: 0
+    _unlockCondition: 
+  _stairs:
+  - _connectionId: STAIR_WEST_R02_R03
+    _lowerRoomId: ROOM_03
+    _upperRoomId: ROOM_02
+    _direction: 0
+    _startPosition: {x: -13.5, y: 4, z: 2}
+    _endPosition: {x: -13.5, y: 0, z: 0}
+    _width: 2.2
+    _stepCount: 20
+    _stepHeight: 0.2
+    _stepDepth: 0.45
+    _generateRailing: 1
+    _useTemporaryRamp: 0
+  - _connectionId: STAIR_EAST_R05_R06
+    _lowerRoomId: ROOM_05
+    _upperRoomId: ROOM_06
+    _direction: 1
+    _startPosition: {x: 14.5, y: 0, z: 0}
+    _endPosition: {x: 14.5, y: 4, z: 2}
+    _width: 2.2
+    _stepCount: 20
+    _stepHeight: 0.2
+    _stepDepth: 0.45
+    _generateRailing: 1
+    _useTemporaryRamp: 0
+  _gameplayMarkers:
+  - _uniqueId: MK_PlayerStart_L03
+    _markerType: 0
+    _roomId: ROOM_01
+    _position: {x: 0, y: 4, z: 6.2}
+    _description: Level 03 start inside the failed elevator.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_R01_ObservationPoint
+    _markerType: 21
+    _roomId: ROOM_01
+    _position: {x: 0, y: 4, z: 1.5}
+    _description: Observation balcony point looking down to ROOM_04.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_R01_LowerArenaViewTarget
+    _markerType: 21
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 0}
+    _description: Look target for lower survival arena.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorStart
+    _markerType: 19
+    _roomId: ROOM_01
+    _position: {x: -1, y: 4, z: 6.3}
+    _description: Elevator arrival/start point.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorReturn
+    _markerType: 19
+    _roomId: ROOM_01
+    _position: {x: 1, y: 4, z: 6.3}
+    _description: Elevator return point after fuse install.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorControlPanel
+    _markerType: 16
+    _roomId: ROOM_01
+    _position: {x: 2.2, y: 4, z: 6.4}
+    _description: Broken elevator control panel.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_FuseSocket_F01
+    _markerType: 24
+    _roomId: ROOM_01
+    _position: {x: 2.6, y: 4, z: 5.4}
+    _description: Socket for F01 replacement fuse.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorRestartPoint
+    _markerType: 19
+    _roomId: ROOM_01
+    _position: {x: 0, y: 4, z: 6.8}
+    _description: Future elevator restart interaction point.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_FinalCoreTransition
+    _markerType: 20
+    _roomId: ROOM_01
+    _position: {x: 0, y: 4, z: 7.4}
+    _description: Future transition to Facility Core.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Enemy_R01_01
+    _markerType: 6
+    _roomId: ROOM_01
+    _position: {x: 0, y: 4, z: 2.7}
+    _description: Upper balcony enemy marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R01_01
+    _markerType: 7
+    _roomId: ROOM_01
+    _position: {x: -2.5, y: 4, z: 2.5}
+    _description: Conditional upper enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R01_02
+    _markerType: 7
+    _roomId: ROOM_01
+    _position: {x: 2.5, y: 4, z: 2.5}
+    _description: Conditional upper enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R02_01
+    _markerType: 7
+    _roomId: ROOM_02
+    _position: {x: -12.5, y: 4, z: 3.5}
+    _description: Conditional upper west enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: MK_StairWest_UpperEntry
+    _markerType: 22
+    _roomId: ROOM_02
+    _position: {x: -13.5, y: 4, z: 2}
+    _description: West stair upper entry.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_StairWest_DownDirection
+    _markerType: 22
+    _roomId: ROOM_02
+    _position: {x: -13.5, y: 3.5, z: 1}
+    _description: West stair down direction.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_StairWest_LowerExit
+    _markerType: 22
+    _roomId: ROOM_03
+    _position: {x: -13.5, y: 0, z: 0}
+    _description: West stair lower exit.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_ConditionalEnemy_R03_01
+    _markerType: 7
+    _roomId: ROOM_03
+    _position: {x: -13, y: 0, z: 3}
+    _description: Conditional lower west enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R03_01
+    _markerType: 5
+    _roomId: ROOM_03
+    _position: {x: -13.5, y: 0, z: -4}
+    _description: Candidate resource.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R03_02
+    _markerType: 5
+    _roomId: ROOM_03
+    _position: {x: -9, y: 0, z: -4}
+    _description: Candidate resource.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: MK_SurvivalEntryTrigger
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: -5.5, y: 0, z: 0}
+    _description: Entering ROOM_04 triggers future timed survival event.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_SurvivalArenaCenter
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: 0, y: 0, z: 0}
+    _description: Survival arena center.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_SurvivalArenaBoundary
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: 0, y: 0, z: 0}
+    _description: Approximate survival arena boundary.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_SurvivalTimerAnchor
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: 0, y: 0, z: 3.8}
+    _description: Future timer UI/world anchor.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_SurvivalEncounterStart
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: -4, y: 0, z: 0}
+    _description: Future survival encounter start.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_SurvivalEncounterComplete
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: 4, y: 0, z: 0}
+    _description: Future survival timer complete.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_SurvivalExitUnlock
+    _markerType: 23
+    _roomId: ROOM_04
+    _position: {x: 6.2, y: 0, z: 0}
+    _description: Future east gate unlock point.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_LockdownSeal_West
+    _markerType: 18
+    _roomId: ROOM_04
+    _position: {x: -6.5, y: 0, z: 0}
+    _description: Temporary west lockdown seal.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_LockdownGate_East
+    _markerType: 18
+    _roomId: ROOM_04
+    _position: {x: 6.5, y: 0, z: 0}
+    _description: Timed survival east gate.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R04_01
+    _markerType: 9
+    _roomId: ROOM_04
+    _position: {x: -2.5, y: 0, z: 3.8}
+    _description: Survival arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R04_02
+    _markerType: 9
+    _roomId: ROOM_04
+    _position: {x: 1.5, y: 0, z: 3.8}
+    _description: Survival arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R04_03
+    _markerType: 9
+    _roomId: ROOM_04
+    _position: {x: -2.2, y: 0, z: -4.2}
+    _description: Survival arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R04_04
+    _markerType: 9
+    _roomId: ROOM_04
+    _position: {x: 2.2, y: 0, z: -4.2}
+    _description: Survival arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Enemy_R04_01
+    _markerType: 6
+    _roomId: ROOM_04
+    _position: {x: -1.8, y: 0, z: 1.5}
+    _description: Survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Enemy_R04_02
+    _markerType: 6
+    _roomId: ROOM_04
+    _position: {x: 2.5, y: 0, z: 0.8}
+    _description: Survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Enemy_R04_03
+    _markerType: 6
+    _roomId: ROOM_04
+    _position: {x: -0.5, y: 0, z: -2.5}
+    _description: Survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Enemy_R04_04
+    _markerType: 6
+    _roomId: ROOM_04
+    _position: {x: 3.5, y: 0, z: -3}
+    _description: Survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R04_01
+    _markerType: 7
+    _roomId: ROOM_04
+    _position: {x: 0, y: 0, z: 4}
+    _description: Conditional survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R04_02
+    _markerType: 7
+    _roomId: ROOM_04
+    _position: {x: -3.5, y: 0, z: 0.5}
+    _description: Conditional survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R04_03
+    _markerType: 7
+    _roomId: ROOM_04
+    _position: {x: 3.5, y: 0, z: 2.5}
+    _description: Conditional survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R04_04
+    _markerType: 7
+    _roomId: ROOM_04
+    _position: {x: -3.5, y: 0, z: -4.8}
+    _description: Conditional survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R04_05
+    _markerType: 7
+    _roomId: ROOM_04
+    _position: {x: 3.5, y: 0, z: -4.8}
+    _description: Conditional survival enemy candidate.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R05_01
+    _markerType: 5
+    _roomId: ROOM_05
+    _position: {x: 9.5, y: 0, z: -4}
+    _description: Candidate resource.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R05_02
+    _markerType: 5
+    _roomId: ROOM_05
+    _position: {x: 12.5, y: 0, z: -4}
+    _description: Candidate resource.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Key_R05_F01
+    _markerType: 4
+    _roomId: ROOM_05
+    _position: {x: 15, y: 0, z: -4}
+    _description: Fixed F01 replacement fuse.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ReplacementFuse_F01
+    _markerType: 24
+    _roomId: ROOM_05
+    _position: {x: 15, y: 0, z: -3.5}
+    _description: Replacement fuse F01.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_StairEast_LowerEntry
+    _markerType: 22
+    _roomId: ROOM_05
+    _position: {x: 14.5, y: 0, z: 0}
+    _description: East stair lower entry.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_StairEast_UpDirection
+    _markerType: 22
+    _roomId: ROOM_05
+    _position: {x: 14.5, y: 0.5, z: 1}
+    _description: East stair up direction.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Resource_R06_01
+    _markerType: 5
+    _roomId: ROOM_06
+    _position: {x: 10, y: 4, z: 4}
+    _description: Candidate resource.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R06_02
+    _markerType: 5
+    _roomId: ROOM_06
+    _position: {x: 13, y: 4, z: 4}
+    _description: Candidate resource.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: MK_StairEast_UpperExit
+    _markerType: 22
+    _roomId: ROOM_06
+    _position: {x: 14.5, y: 4, z: 2}
+    _description: East stair upper exit.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_S01_UnlockSide_R06
+    _markerType: 3
+    _roomId: ROOM_06
+    _position: {x: 6.2, y: 4, z: 4.2}
+    _description: S01 unlock side in ROOM_06.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_S01_BlockedSide_R01
+    _markerType: 3
+    _roomId: ROOM_01
+    _position: {x: 5.8, y: 4, z: 4.2}
+    _description: S01 blocked side in ROOM_01.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  _cameraMarkers:
+  - _cameraId: CAM_POS_L03_R01_Observation
+    _roomId: ROOM_01
+    _position: {x: 0, y: 12, z: -4}
+    _eulerAngles: {x: 60, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Observation view from upper balcony toward ROOM_4.
+  - _cameraId: CAM_POS_L03_R01_Elevator
+    _roomId: ROOM_01
+    _position: {x: 0, y: 9, z: 1}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Elevator start/return composition.
+  - _cameraId: CAM_POS_L03_R02
+    _roomId: ROOM_02
+    _position: {x: -11, y: 10, z: -4}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Upper west stair access.
+  - _cameraId: CAM_POS_L03_R06
+    _roomId: ROOM_06
+    _position: {x: 12, y: 10, z: -4}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Upper east return route.
+  - _cameraId: CAM_POS_L03_R03
+    _roomId: ROOM_03
+    _position: {x: -11, y: 8, z: -7}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Lower west landing.
+  - _cameraId: CAM_POS_L03_R04_West
+    _roomId: ROOM_04
+    _position: {x: -3, y: 10, z: -8}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Survival arena west side.
+  - _cameraId: CAM_POS_L03_R04_East
+    _roomId: ROOM_04
+    _position: {x: 3, y: 10, z: -8}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Survival arena east side.
+  - _cameraId: CAM_POS_L03_R05
+    _roomId: ROOM_05
+    _position: {x: 12, y: 8, z: -7}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Lower east fuse room.
+  - _cameraId: CAM_POS_L03_StairWest
+    _roomId: ROOM_02
+    _position: {x: -14, y: 8, z: -2}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: West stair vertical connection.
+  - _cameraId: CAM_POS_L03_StairEast
+    _roomId: ROOM_05
+    _position: {x: 15, y: 8, z: -2}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: East stair vertical connection.
+  _survivalRule:
+    _encounterId: SURVIVAL_R04
+    _requiresAllEnemiesDefeated: 0
+    _unlockCondition: SurvivalTimerComplete
+    _candidates:
+    - _markerId: SP_Enemy_R04_01
+      _activationGroup: Standard
+      _corpseActivityRequirement: Any
+      _activationWeight: 1
+      _minimumActiveCount: 2
+      _maximumActiveCount: 4
+    - _markerId: SP_Enemy_R04_02
+      _activationGroup: Standard
+      _corpseActivityRequirement: Any
+      _activationWeight: 1
+      _minimumActiveCount: 2
+      _maximumActiveCount: 4
+    - _markerId: SP_Enemy_R04_03
+      _activationGroup: Standard
+      _corpseActivityRequirement: Any
+      _activationWeight: 1
+      _minimumActiveCount: 2
+      _maximumActiveCount: 4
+    - _markerId: SP_Enemy_R04_04
+      _activationGroup: Standard
+      _corpseActivityRequirement: Any
+      _activationWeight: 1
+      _minimumActiveCount: 2
+      _maximumActiveCount: 4
+    - _markerId: SP_ConditionalEnemy_R04_01
+      _activationGroup: CorpseHigh
+      _corpseActivityRequirement: High
+      _activationWeight: 0.7
+      _minimumActiveCount: 0
+      _maximumActiveCount: 3
+    - _markerId: SP_ConditionalEnemy_R04_02
+      _activationGroup: CorpseHigh
+      _corpseActivityRequirement: High
+      _activationWeight: 0.7
+      _minimumActiveCount: 0
+      _maximumActiveCount: 3
+    - _markerId: SP_ConditionalEnemy_R04_03
+      _activationGroup: CorpseHigh
+      _corpseActivityRequirement: High
+      _activationWeight: 0.7
+      _minimumActiveCount: 0
+      _maximumActiveCount: 3
+    - _markerId: SP_ConditionalEnemy_R04_04
+      _activationGroup: CorpseHigh
+      _corpseActivityRequirement: High
+      _activationWeight: 0.7
+      _minimumActiveCount: 0
+      _maximumActiveCount: 3
+    - _markerId: SP_ConditionalEnemy_R04_05
+      _activationGroup: CorpseHigh
+      _corpseActivityRequirement: High
+      _activationWeight: 0.7
+      _minimumActiveCount: 0
+      _maximumActiveCount: 3

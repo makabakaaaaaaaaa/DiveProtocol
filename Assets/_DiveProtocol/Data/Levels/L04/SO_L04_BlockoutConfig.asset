@@ -1,0 +1,445 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c919ae10343e13943915267c60ff550a, type: 3}
+  m_Name: SO_L04_BlockoutConfig
+  m_EditorClassIdentifier: 
+  _wallHeight: 3.5
+  _wallThickness: 0.25
+  _floorThickness: 0.2
+  _doorWidth: 1.5
+  _bossEntranceWidth: 2.4
+  _bossEntranceHeight: 2.6
+  _arenaCenter: {x: 0, y: 0, z: -2}
+  _arenaWidth: 24
+  _octagonalDiagonalWallLength: 7
+  _bossMinimumMovementRingWidth: 4
+  _preparationWidth: 9
+  _preparationLength: 8
+  _debrisSize: {x: 2.2, y: 0.9, z: 0.8}
+  _phaseTwoCoreSize: {x: 4.5, y: 2.4, z: 4.5}
+  _preparationMaterial: {fileID: 2100000, guid: fb70d439686809249b7c5b4bfa6b475d, type: 2}
+  _arenaMaterial: {fileID: 2100000, guid: b0ba3351c5c2f1c4c8cb132f24a19753, type: 2}
+  _bossMaterial: {fileID: 2100000, guid: a1ca692be0600ef4a865659dc49a52ac, type: 2}
+  _debrisMaterial: {fileID: 2100000, guid: 4286a29702ca7ce4e9f47a77c84fb4e7, type: 2}
+  _phaseTwoCoreMaterial: {fileID: 2100000, guid: b3d33558ed96c694282414f7626217e2, type: 2}
+  _vulnerablePointMaterial: {fileID: 2100000, guid: 0e0c96226a4ea77479cf5eb0a0a789aa, type: 2}
+  _finalModificationMaterial: {fileID: 2100000, guid: df7c3aa1ec165e64288d5f126ce9dda7, type: 2}
+  _resultsTransitionMaterial: {fileID: 2100000, guid: ef56eaeb06e224e4ab5e9fc27dc21bb0, type: 2}
+  _rooms:
+  - _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 12}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 9
+    _length: 8
+    _height: 3.5
+    _roomShape: 0
+    _safeZone: 1
+    _allowEnemyActivation: 0
+    _allowBossActivation: 0
+  - _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -2}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 24
+    _length: 24
+    _height: 3.5
+    _roomShape: 1
+    _safeZone: 0
+    _allowEnemyActivation: 1
+    _allowBossActivation: 1
+  _doors:
+  - _doorId: D_L04_ELEVATOR
+    _fromRoomId: 
+    _toRoomId: ROOM_01
+    _doorType: 0
+    _position: {x: 0, y: 0, z: 16.2}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 2
+    _height: 2.4
+    _length: 0.5
+    _requiredKeyId: 
+  - _doorId: D_L04_PREP_CORE
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_02
+    _doorType: 1
+    _position: {x: 0, y: 0, z: 8}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 2.4
+    _height: 2.6
+    _length: 0.5
+    _requiredKeyId: 
+  _gameplayMarkers:
+  - _uniqueId: MK_PlayerStart_L04
+    _markerType: 0
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 15}
+    _description: Final level player start at elevator arrival.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorArrival_L04
+    _markerType: 19
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 15.6}
+    _description: Facility Core elevator arrival.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorDisabledDuringBoss
+    _markerType: 19
+    _roomId: ROOM_01
+    _position: {x: 2, y: 0, z: 15.2}
+    _description: Elevator disabled after entering boss arena.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Resource_R01_01
+    _markerType: 5
+    _roomId: ROOM_01
+    _position: {x: -3, y: 0, z: 12.2}
+    _description: Optional preparation supply.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R01_02
+    _markerType: 5
+    _roomId: ROOM_01
+    _position: {x: -3, y: 0, z: 10.9}
+    _description: Optional preparation supply.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R01_03
+    _markerType: 5
+    _roomId: ROOM_01
+    _position: {x: -3, y: 0, z: 9.6}
+    _description: Optional preparation supply.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: MK_FinalModificationOption_01
+    _markerType: 11
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 12}
+    _description: Final body modification option.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_FinalModificationOption_02
+    _markerType: 11
+    _roomId: ROOM_01
+    _position: {x: 1.8, y: 0, z: 12}
+    _description: Final body modification option.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_FinalModificationOption_03
+    _markerType: 11
+    _roomId: ROOM_01
+    _position: {x: -1.8, y: 0, z: 12}
+    _description: Final body modification option.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_FinalModificationSelectionArea
+    _markerType: 12
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 12}
+    _description: Final modification selection area.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_FinalModificationConfirmed
+    _markerType: 16
+    _roomId: ROOM_01
+    _position: {x: 2.8, y: 0, z: 11.2}
+    _description: Future final modification confirmation.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BossEntrance_PreparationSide
+    _markerType: 18
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 8.6}
+    _description: Boss entrance preparation side.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BossEntrance_ArenaSide
+    _markerType: 18
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: 7.4}
+    _description: Boss entrance arena side.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ArenaSeal_Entrance
+    _markerType: 18
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: 8}
+    _description: Arena entrance seal.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseOne_Spawn
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -2}
+    _description: Phase One mobile boss spawn.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseOne_ArenaCenter
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -2}
+    _description: Phase One arena center.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseOne_Boundary
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -2}
+    _description: Phase One arena boundary.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseOne_Activation
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: 6}
+    _description: Future Phase One activation.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseOne_HealthThreshold
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 1.4, y: 0, z: -2}
+    _description: Phase transition health threshold reference.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseTransitionStart
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: -1.4, y: 0, z: -2}
+    _description: Phase transition start marker.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseTwo_CoreAnchor
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -2}
+    _description: Phase Two fixed core anchor.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseTwo_CoreBounds
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -2}
+    _description: Phase Two core bounds.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseTwo_Activation
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -0.5}
+    _description: Future Phase Two activation.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_PhaseTwo_Defeated
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -3.5}
+    _description: Phase Two defeated state.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_VulnerablePoint_01
+    _markerType: 25
+    _roomId: ROOM_02
+    _position: {x: 0, y: 1.8, z: 0.4}
+    _description: Phase Two vulnerable point.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_VulnerablePoint_02
+    _markerType: 25
+    _roomId: ROOM_02
+    _position: {x: 1.8, y: 1.5, z: -2}
+    _description: Phase Two vulnerable point.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_VulnerablePoint_03
+    _markerType: 25
+    _roomId: ROOM_02
+    _position: {x: -1.8, y: 1.5, z: -3.4}
+    _description: Phase Two vulnerable point.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BossDefeated
+    _markerType: 15
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -4.5}
+    _description: Boss defeated marker.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_RunComplete
+    _markerType: 20
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -9}
+    _description: Run complete logic marker, not an exit.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ResultsTransition
+    _markerType: 20
+    _roomId: ROOM_02
+    _position: {x: 0, y: 0, z: -9.8}
+    _description: Results transition logic marker.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_EndingTransition
+    _markerType: 20
+    _roomId: ROOM_02
+    _position: {x: 1.2, y: 0, z: -9.8}
+    _description: Ending transition logic marker.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R02_01
+    _markerType: 9
+    _roomId: ROOM_02
+    _position: {x: 4, y: 0, z: 4.5}
+    _description: Arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R02_02
+    _markerType: 9
+    _roomId: ROOM_02
+    _position: {x: 7.2, y: 0, z: -1}
+    _description: Arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R02_03
+    _markerType: 9
+    _roomId: ROOM_02
+    _position: {x: 3, y: 0, z: -8}
+    _description: Arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Debris_R02_04
+    _markerType: 9
+    _roomId: ROOM_02
+    _position: {x: -6, y: 0, z: -5.5}
+    _description: Arena debris.
+    _criticalProgression: 0
+    _randomlyDisableable: 0
+  - _uniqueId: SP_ConditionalEnemy_R02_01
+    _markerType: 7
+    _roomId: ROOM_02
+    _position: {x: -6, y: 0, z: 3.2}
+    _description: Conditional corpse enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R02_02
+    _markerType: 7
+    _roomId: ROOM_02
+    _position: {x: -7.5, y: 0, z: -0.8}
+    _description: Conditional corpse enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R02_03
+    _markerType: 7
+    _roomId: ROOM_02
+    _position: {x: -4.8, y: 0, z: -7.5}
+    _description: Conditional corpse enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R02_04
+    _markerType: 7
+    _roomId: ROOM_02
+    _position: {x: 6.5, y: 0, z: 3.2}
+    _description: Conditional corpse enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R02_05
+    _markerType: 7
+    _roomId: ROOM_02
+    _position: {x: 5.4, y: 0, z: -6}
+    _description: Conditional corpse enemy.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  _cameraMarkers:
+  - _cameraId: CAM_POS_L04_PREPARATION
+    _roomId: ROOM_01
+    _position: {x: 0, y: 9, z: 6}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Preparation room resources and final modification options.
+  - _cameraId: CAM_POS_L04_FINAL_MODIFICATION
+    _roomId: ROOM_01
+    _position: {x: 0, y: 8, z: 8}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Final modification choice focus.
+  - _cameraId: CAM_POS_L04_BOSS_ENTRANCE
+    _roomId: ROOM_01
+    _position: {x: 0, y: 9, z: 3}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Boss entrance gate.
+  - _cameraId: CAM_POS_L04_PHASE1_NORTH
+    _roomId: ROOM_02
+    _position: {x: 0, y: 14, z: 5}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Phase One north arena view.
+  - _cameraId: CAM_POS_L04_PHASE1_SOUTH
+    _roomId: ROOM_02
+    _position: {x: 0, y: 14, z: -12}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Phase One south arena view.
+  - _cameraId: CAM_POS_L04_PHASE2
+    _roomId: ROOM_02
+    _position: {x: 0, y: 12, z: -7}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Phase Two core-focused view.
+  - _cameraId: CAM_POS_L04_RESULTS
+    _roomId: ROOM_02
+    _position: {x: 0, y: 10, z: -10}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Run complete/results logic view.
+  _conditionalEnemies:
+  - _markerId: SP_ConditionalEnemy_R02_01
+    _activationPhase: 0
+    _corpseActivityRequirement: High
+    _activationWeight: 0.8
+    _minimumDelay: 1
+    _maximumDelay: 6
+    _disabledAfterPhaseTwo: 1
+    _candidateGroup: FacilityCoreCorpses
+  - _markerId: SP_ConditionalEnemy_R02_02
+    _activationPhase: 0
+    _corpseActivityRequirement: High
+    _activationWeight: 0.8
+    _minimumDelay: 2
+    _maximumDelay: 8
+    _disabledAfterPhaseTwo: 1
+    _candidateGroup: FacilityCoreCorpses
+  - _markerId: SP_ConditionalEnemy_R02_03
+    _activationPhase: 0
+    _corpseActivityRequirement: High
+    _activationWeight: 0.7
+    _minimumDelay: 3
+    _maximumDelay: 10
+    _disabledAfterPhaseTwo: 1
+    _candidateGroup: FacilityCoreCorpses
+  - _markerId: SP_ConditionalEnemy_R02_04
+    _activationPhase: 0
+    _corpseActivityRequirement: High
+    _activationWeight: 0.8
+    _minimumDelay: 1
+    _maximumDelay: 7
+    _disabledAfterPhaseTwo: 1
+    _candidateGroup: FacilityCoreCorpses
+  - _markerId: SP_ConditionalEnemy_R02_05
+    _activationPhase: 0
+    _corpseActivityRequirement: High
+    _activationWeight: 0.7
+    _minimumDelay: 3
+    _maximumDelay: 10
+    _disabledAfterPhaseTwo: 1
+    _candidateGroup: FacilityCoreCorpses
+  _arenaResourcePositions: []
+  _phases: 000000000100000002000000030000000400000005000000060000000700000008000000

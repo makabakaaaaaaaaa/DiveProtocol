@@ -1,0 +1,465 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83c71d9109c6f4948bf4b498e54a950e, type: 3}
+  m_Name: SO_L02_BlockoutConfig
+  m_EditorClassIdentifier: 
+  _wallHeight: 3
+  _wallThickness: 0.2
+  _floorThickness: 0.2
+  _doorWidth: 1.5
+  _doorHeight: 2.3
+  _defaultCorridorWidth: 3.8
+  _bossWalkableRingWidth: 2
+  _elevatorDoorWidth: 1.8
+  _blockoutMaterial: {fileID: 2100000, guid: 93957792275ce5b4cbee40eae5d6ce9e, type: 2}
+  _rooms:
+  - _roomId: ROOM_01
+    _segments:
+    - _segmentId: R01_Main
+      _position: {x: 0, y: 0, z: 0}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 13
+      _length: 14
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+  - _roomId: ROOM_02
+    _segments:
+    - _segmentId: R02_Main
+      _position: {x: -10, y: 0, z: -4}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 8
+      _length: 7
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+  - _roomId: ROOM_03
+    _segments:
+    - _segmentId: R03_Main
+      _position: {x: -10, y: 0, z: 4}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 8
+      _length: 7
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+  - _roomId: ROOM_04
+    _segments:
+    - _segmentId: R04_North
+      _position: {x: 10, y: 0, z: 4}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 9
+      _length: 3.8
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+    - _segmentId: R04_East
+      _position: {x: 14, y: 0, z: 0}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 3.8
+      _length: 12
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+    - _segmentId: R04_South
+      _position: {x: 10, y: 0, z: -5}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 9
+      _length: 3.8
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+  - _roomId: ROOM_05
+    _segments:
+    - _segmentId: R05_Main
+      _position: {x: 9, y: 0, z: 0}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 7
+      _length: 6
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+  - _roomId: ROOM_06
+    _segments:
+    - _segmentId: R06_Main
+      _position: {x: 0, y: 0, z: 13}
+      _eulerAngles: {x: 0, y: 0, z: 0}
+      _width: 10
+      _length: 11
+      _height: 3
+      _generateFloor: 1
+      _generateWalls: 1
+  _connections:
+  - _connectionId: ENT_L02_START
+    _fromRoomId: 
+    _toRoomId: ROOM_01
+    _connectionType: 3
+    _position: {x: 0, y: 0, z: -7.3}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 2
+    _length: 0.4
+    _requiredKeyId: 
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_R01_R02
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_02
+    _connectionType: 0
+    _position: {x: -6.5, y: 0, z: -3.8}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_R02_R03
+    _fromRoomId: ROOM_02
+    _toRoomId: ROOM_03
+    _connectionType: 0
+    _position: {x: -10, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_K01_WEST_SHORTCUT
+    _fromRoomId: ROOM_03
+    _toRoomId: ROOM_01
+    _connectionType: 2
+    _position: {x: -6.5, y: 0, z: 3.8}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: K01_ControlRoomKey
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_R01_R04_SOUTH
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_04
+    _connectionType: 0
+    _position: {x: 6.5, y: 0, z: -4.5}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: 
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_K01_EAST_SHORTCUT
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_04
+    _connectionType: 2
+    _position: {x: 6.5, y: 0, z: 4}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: K01_ControlRoomKey
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_K01_RECORDS
+    _fromRoomId: ROOM_04
+    _toRoomId: ROOM_05
+    _connectionType: 1
+    _position: {x: 7.1, y: 0, z: 0}
+    _eulerAngles: {x: 0, y: 90, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: K01_ControlRoomKey
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_K02_RECONSTRUCTION
+    _fromRoomId: ROOM_01
+    _toRoomId: ROOM_06
+    _connectionType: 1
+    _position: {x: 0, y: 0, z: 7}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 1.5
+    _length: 0.4
+    _requiredKeyId: K02_SubjectAccessTag
+    _twoWayAfterUnlock: 1
+  - _connectionId: D_R06_ELEVATOR
+    _fromRoomId: ROOM_06
+    _toRoomId: 
+    _connectionType: 4
+    _position: {x: 0, y: 0, z: 18.7}
+    _eulerAngles: {x: 0, y: 0, z: 0}
+    _width: 1.8
+    _length: 0.5
+    _requiredKeyId: 
+    _twoWayAfterUnlock: 1
+  _gameplayMarkers:
+  - _uniqueId: MK_PlayerStart_L02
+    _markerType: 0
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: -5.4}
+    _description: Level 02 player entry from south.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_IncineratorControlTerminal
+    _markerType: 16
+    _roomId: ROOM_01
+    _position: {x: 3.2, y: 0, z: -1.5}
+    _description: Terminal where C01 will later be entered.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_C01InputPoint
+    _markerType: 17
+    _roomId: ROOM_01
+    _position: {x: 3.4, y: 0, z: -1.1}
+    _description: C01 input point for incinerator override.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_Restrained
+    _markerType: 15
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 0.8}
+    _description: Restrained experiment subject visible from level start.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_ActivationTrigger
+    _markerType: 15
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: -1.8}
+    _description: Future trigger after C01 input.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_ReleasePoint
+    _markerType: 15
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 1.6}
+    _description: Boss exits incinerator here.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_ArenaCenter
+    _markerType: 15
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 0}
+    _description: Boss arena center.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Boss_ArenaBoundary
+    _markerType: 15
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 0}
+    _description: Approximate future arena boundary.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BossReward_K02
+    _markerType: 4
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 2.7}
+    _description: Boss reward K02_SubjectAccessTag.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ArenaSeal_South
+    _markerType: 18
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: -6.7}
+    _description: Future arena seal.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ArenaSeal_West
+    _markerType: 18
+    _roomId: ROOM_01
+    _position: {x: -6.4, y: 0, z: 0}
+    _description: Future arena seal.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ArenaSeal_East
+    _markerType: 18
+    _roomId: ROOM_01
+    _position: {x: 6.4, y: 0, z: 0}
+    _description: Future arena seal.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ArenaSeal_North
+    _markerType: 18
+    _roomId: ROOM_01
+    _position: {x: 0, y: 0, z: 6.8}
+    _description: Future arena seal.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Enemy_R02_01
+    _markerType: 6
+    _roomId: ROOM_02
+    _position: {x: -12, y: 0, z: -4.5}
+    _description: Standard enemy marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Enemy_R02_02
+    _markerType: 6
+    _roomId: ROOM_02
+    _position: {x: -8, y: 0, z: -3.5}
+    _description: Standard enemy marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Key_R03_K01
+    _markerType: 4
+    _roomId: ROOM_03
+    _position: {x: -10, y: 0, z: 4.8}
+    _description: Fixed K01_ControlRoomKey.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Resource_R03_01
+    _markerType: 5
+    _roomId: ROOM_03
+    _position: {x: -12.5, y: 0, z: 3.2}
+    _description: Candidate resource marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_ConditionalEnemy_R03_01
+    _markerType: 7
+    _roomId: ROOM_03
+    _position: {x: -8, y: 0, z: 5.5}
+    _description: Conditional enemy marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Enemy_R04_01
+    _markerType: 6
+    _roomId: ROOM_04
+    _position: {x: 12, y: 0, z: 4.5}
+    _description: Standard enemy marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Enemy_R04_02
+    _markerType: 6
+    _roomId: ROOM_04
+    _position: {x: 13.5, y: 0, z: -3.5}
+    _description: Standard enemy marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Resource_R04_01
+    _markerType: 5
+    _roomId: ROOM_04
+    _position: {x: 10, y: 0, z: -6}
+    _description: Candidate resource marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: SP_Code_R05_C01
+    _markerType: 17
+    _roomId: ROOM_05
+    _position: {x: 9, y: 0, z: 0.8}
+    _description: Fixed C01_IncineratorOverrideCode.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: SP_Resource_R05_01
+    _markerType: 5
+    _roomId: ROOM_05
+    _position: {x: 10.8, y: 0, z: -1.8}
+    _description: Candidate resource marker.
+    _criticalProgression: 0
+    _randomlyDisableable: 1
+  - _uniqueId: MK_FacilityRecordsTerminal
+    _markerType: 16
+    _roomId: ROOM_05
+    _position: {x: 9, y: 0, z: 1.4}
+    _description: Facility records terminal holding C01.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BodyModificationOption_01
+    _markerType: 11
+    _roomId: ROOM_06
+    _position: {x: -2.8, y: 0, z: 13}
+    _description: Body modification option.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BodyModificationOption_02
+    _markerType: 11
+    _roomId: ROOM_06
+    _position: {x: 0, y: 0, z: 13}
+    _description: Body modification option.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BodyModificationOption_03
+    _markerType: 11
+    _roomId: ROOM_06
+    _position: {x: 2.8, y: 0, z: 13}
+    _description: Body modification option.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_BodyModificationSelectionArea
+    _markerType: 12
+    _roomId: ROOM_06
+    _position: {x: 0, y: 0, z: 13}
+    _description: Future three-choice body modification area.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorCallPanel
+    _markerType: 16
+    _roomId: ROOM_06
+    _position: {x: 2.2, y: 0, z: 17.6}
+    _description: Future elevator call panel.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_ElevatorEntry
+    _markerType: 19
+    _roomId: ROOM_06
+    _position: {x: 0, y: 0, z: 18.1}
+    _description: Elevator entry threshold.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  - _uniqueId: MK_Level03Transition
+    _markerType: 20
+    _roomId: ROOM_06
+    _position: {x: 0, y: 0, z: 19.2}
+    _description: Future Level 03 transition marker.
+    _criticalProgression: 1
+    _randomlyDisableable: 0
+  _cameraMarkers:
+  - _cameraId: CAM_POS_L02_R01_Exploration
+    _roomId: ROOM_01
+    _position: {x: 0, y: 11, z: -10}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: 'Exploration view: start, incinerator, restrained subject.'
+  - _cameraId: CAM_POS_L02_R01_Boss
+    _roomId: ROOM_01
+    _position: {x: 0, y: 12, z: -8}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Future boss arena composition.
+  - _cameraId: CAM_POS_L02_R02
+    _roomId: ROOM_02
+    _position: {x: -10, y: 9, z: -10}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Western lower section.
+  - _cameraId: CAM_POS_L02_R03
+    _roomId: ROOM_03
+    _position: {x: -10, y: 9, z: -2}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: K01 control key area.
+  - _cameraId: CAM_POS_L02_R04_North
+    _roomId: ROOM_04
+    _position: {x: 10, y: 10, z: -2}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Eastern north shortcut loop.
+  - _cameraId: CAM_POS_L02_R04_South
+    _roomId: ROOM_04
+    _position: {x: 11, y: 10, z: -11}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Eastern south approach.
+  - _cameraId: CAM_POS_L02_R05
+    _roomId: ROOM_05
+    _position: {x: 9, y: 9, z: -6}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Facility records room.
+  - _cameraId: CAM_POS_L02_R06
+    _roomId: ROOM_06
+    _position: {x: 0, y: 11, z: 6}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Reconstruction chamber.
+  - _cameraId: CAM_POS_L02_Elevator
+    _roomId: ROOM_06
+    _position: {x: 0, y: 9, z: 12}
+    _eulerAngles: {x: 55, y: 0, z: 0}
+    _fieldOfView: 55
+    _notes: Elevator entry and Level 03 transition.
+  _phases: 0000000001000000020000000300000004000000050000000600000007000000

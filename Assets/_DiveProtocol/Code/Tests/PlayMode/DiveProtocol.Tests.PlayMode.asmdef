@@ -1,0 +1,19 @@
+{
+    "name": "DiveProtocol.Tests.PlayMode",
+    "rootNamespace": "DiveProtocol.Tests.PlayMode",
+    "references": [
+        "DiveProtocol.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

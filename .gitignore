@@ -1,0 +1,51 @@
+# Unity generated directories
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Bb]uilds/
+/[Bb]uild/
+/ProjectBackups/
+
+# IDE and editor caches
+/.vs/
+/.idea/
+/.vscode/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.opendb
+*.VC.db
+
+# Generated debug symbols and Unity diagnostics
+*.pdb
+*.mdb
+*.mdb.meta
+sysinfo.txt
+crashlytics-build.properties
+
+# Operating system files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.tmp
+*.temp
+*~
+
+# Local Codex task logs/reports
+Codex_Overnight_*.log
+Codex_Overnight_*.md

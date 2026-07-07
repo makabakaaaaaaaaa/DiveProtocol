@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6455445f56f4bba44994a5f3e54d164c, type: 3}
+  m_Name: SO_LevelLighting_Dark_Default
+  m_EditorClassIdentifier: 
+  _ambientLightColor: {r: 0.035, g: 0.045, b: 0.055, a: 1}
+  _ambientIntensity: 0.45
+  _skyboxEnabled: 0
+  _cameraBackgroundColor: {r: 0.005, g: 0.006, b: 0.008, a: 1}
+  _fogEnabled: 1
+  _fogColor: {r: 0.015, g: 0.018, b: 0.022, a: 1}
+  _fogDensity: 0.018
+  _defaultExposure: 0
+  _environmentLightIntensityMultiplier: 0.35
+  _shadowDistance: 35
+  _playerFlashlightProfile: {fileID: 11400000, guid: 2a840ca8a0728604692858e8ca7af4f2, type: 2}
