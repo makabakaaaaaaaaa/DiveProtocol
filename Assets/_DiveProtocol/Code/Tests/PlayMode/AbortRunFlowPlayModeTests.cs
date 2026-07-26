@@ -25,7 +25,7 @@ namespace DiveProtocol.Tests.PlayMode
         public IEnumerator AbortClearsRunWithoutResultsRewardsOrPersistence()
         {
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             var run = AppRoot.Instance.RunManager.CurrentRun;
             run.Player.TakeDamage(40);
             run.Player.TryConsumeLoadedAmmo();
@@ -46,7 +46,7 @@ namespace DiveProtocol.Tests.PlayMode
             Assert.That(File.ReadAllText(AppRoot.Instance.SaveManager.SaveFilePath), Does.Not.Contain("L_ABORT_TEST"));
 
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             var newRun = AppRoot.Instance.RunManager.CurrentRun;
             Assert.That(newRun.Player.CurrentHealth, Is.EqualTo(newRun.Player.MaxHealth));
             Assert.That(newRun.Inventory.HasKeyItem("AbortKey"), Is.False);

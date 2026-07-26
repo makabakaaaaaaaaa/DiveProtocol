@@ -7,7 +7,7 @@ namespace DiveProtocol
     /// Controls a pre-placed map enemy that patrols, detects a supplied player target, chases, and delegates attacks.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class EnemyPatrolChaseController : MonoBehaviour
+    public sealed class EnemyPatrolChaseController : MonoBehaviour, IEnemyAwarenessAudioState
     {
         [Header("References")]
         [Tooltip("Agent used for patrol and chase movement.")]
@@ -53,10 +53,13 @@ namespace DiveProtocol
         private bool _hasLoggedAgentDisabled;
         private bool _hasLoggedNotOnNavMesh;
         private bool _hasLoggedStoppingDistanceWarning;
+        private HealthComponent _health;
 
         public Transform PlayerTarget { get; private set; }
         public bool IsPatrolling { get; private set; }
         public bool IsChasing { get; private set; }
+        public bool IsPlayerDetectedForAudio => IsChasing && PlayerTarget != null && !IsDeadForAudio;
+        public bool IsDeadForAudio => _health != null && !_health.IsAlive;
 
         private void Awake()
         {
@@ -454,6 +457,11 @@ namespace DiveProtocol
             if (contactAttack == null)
             {
                 contactAttack = GetComponent<EnemyContactAttack>();
+            }
+
+            if (_health == null)
+            {
+                _health = GetComponent<HealthComponent>();
             }
         }
 

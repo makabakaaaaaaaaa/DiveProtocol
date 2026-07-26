@@ -7,7 +7,7 @@ namespace DiveProtocol
     /// Minimal whitebox enemy chase controller driven by a supplied target transform.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class EnemyChaseController : MonoBehaviour
+    public sealed class EnemyChaseController : MonoBehaviour, IEnemyAwarenessAudioState
     {
         [Header("Agent")]
         [Tooltip("NavMeshAgent used to move this enemy.")]
@@ -28,13 +28,17 @@ namespace DiveProtocol
         private bool _movementEnabled = true;
         private bool _hasLoggedMissingAgent;
         private bool _hasLoggedNotOnNavMesh;
+        private HealthComponent _health;
 
         public Transform Target { get; private set; }
         public bool HasTarget => Target != null;
+        public bool IsPlayerDetectedForAudio => HasTarget && !IsDeadForAudio;
+        public bool IsDeadForAudio => _health != null && !_health.IsAlive;
 
         private void Awake()
         {
             ResolveAgent();
+            _health = GetComponent<HealthComponent>();
 
             if (agent != null)
             {

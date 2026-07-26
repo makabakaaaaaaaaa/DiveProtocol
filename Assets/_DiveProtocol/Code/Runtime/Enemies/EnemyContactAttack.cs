@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
+using DiveProtocol.Builds;
+using DiveProtocol.Enemies;
 
 namespace DiveProtocol
 {
@@ -23,6 +25,14 @@ namespace DiveProtocol
         [SerializeField, Min(0f)]
         private float damage = 15f;
 
+        [Tooltip("Delay between starting the attack animation and applying damage.")]
+        [SerializeField, Min(0f)]
+        private float hitDelaySeconds = 0.35f;
+
+        [Tooltip("When enabled, the target must still be in range at the hit frame to receive damage.")]
+        [SerializeField]
+        private bool requireTargetInRangeAtHit = true;
+
         [Header("Events")]
         [SerializeField]
         private UnityEvent onAttack;
@@ -30,15 +40,30 @@ namespace DiveProtocol
         private IDamageable _targetDamageable;
         private float _nextAttackTime;
         private bool _attackEnabled = true;
+        private bool _attackInProgress;
+        private Coroutine _attackCoroutine;
+        private EnemyAnimatorBridge _animatorBridge;
 
         private void Awake()
         {
             CacheTargetDamageable();
+            _animatorBridge = GetComponent<EnemyAnimatorBridge>();
         }
 
         private void Update()
         {
             TryAttack();
+        }
+
+        private void OnDisable()
+        {
+            if (_attackCoroutine != null)
+            {
+                StopCoroutine(_attackCoroutine);
+                _attackCoroutine = null;
+            }
+
+            _attackInProgress = false;
         }
 
         /// <summary>
@@ -73,6 +98,7 @@ namespace DiveProtocol
         public bool TryAttack()
         {
             if (!_attackEnabled ||
+                _attackInProgress ||
                 target == null ||
                 _targetDamageable == null ||
                 !_targetDamageable.IsAlive ||
@@ -88,18 +114,67 @@ namespace DiveProtocol
             }
 
             _nextAttackTime = Time.time + attackCooldownSeconds;
+            _attackInProgress = true;
+            _animatorBridge ??= GetComponent<EnemyAnimatorBridge>();
+            _animatorBridge?.PlayAttack();
+            onAttack?.Invoke();
+
+            if (_attackCoroutine != null)
+            {
+                StopCoroutine(_attackCoroutine);
+            }
+
+            _attackCoroutine = StartCoroutine(ApplyDamageAfterHitDelay());
+            return true;
+        }
+
+        private System.Collections.IEnumerator ApplyDamageAfterHitDelay()
+        {
+            if (hitDelaySeconds > 0f)
+            {
+                yield return new WaitForSeconds(hitDelaySeconds);
+            }
+
+            _attackCoroutine = null;
+
+            if (!_attackEnabled ||
+                target == null ||
+                _targetDamageable == null ||
+                !_targetDamageable.IsAlive)
+            {
+                _attackInProgress = false;
+                yield break;
+            }
+
+            Vector3 offset = target.position - transform.position;
+            if (requireTargetInRangeAtHit &&
+                offset.sqrMagnitude > attackRange * attackRange)
+            {
+                _attackInProgress = false;
+                yield break;
+            }
+
             Vector3 hitDirection = offset.sqrMagnitude > 0.0001f
                 ? offset.normalized
                 : transform.forward;
+
+            PlayerBuildController buildController = target.GetComponentInParent<PlayerBuildController>();
+            if (buildController != null &&
+                buildController.Symbiosis != null &&
+                buildController.Symbiosis.TryTriggerPollutionCoat(gameObject))
+            {
+                _attackInProgress = false;
+                yield break;
+            }
 
             _targetDamageable.TakeDamage(new DamageInfo(
                 damage,
                 gameObject,
                 target.position,
-                hitDirection));
+                hitDirection,
+                DamageType.Contact));
 
-            onAttack?.Invoke();
-            return true;
+            _attackInProgress = false;
         }
 
         private void CacheTargetDamageable()
@@ -115,6 +190,7 @@ namespace DiveProtocol
             attackRange = Mathf.Max(0f, attackRange);
             attackCooldownSeconds = Mathf.Max(0.01f, attackCooldownSeconds);
             damage = Mathf.Max(0f, damage);
+            hitDelaySeconds = Mathf.Max(0f, hitDelaySeconds);
         }
 #endif
     }

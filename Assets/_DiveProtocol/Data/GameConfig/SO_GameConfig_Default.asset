@@ -17,3 +17,4 @@ MonoBehaviour:
   _initialReserveAmmo: 12
   _defaultMagazineSize: 6
   _forceDoorHealthCost: 5
+  _startingLevelSceneName: SCN_L02_Containment

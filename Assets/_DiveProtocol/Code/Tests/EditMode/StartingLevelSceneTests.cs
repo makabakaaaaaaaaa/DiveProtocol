@@ -29,6 +29,7 @@ namespace DiveProtocol.Tests.EditMode
             {
                 "Assets/_DiveProtocol/Scenes/Levels/SCN_DemoLevel.unity",
                 "Assets/_DiveProtocol/Scenes/Levels/SCN_L01_Drainage.unity",
+                "Assets/_DiveProtocol/Scenes/Levels/SCN_L02_Containment.unity",
                 "Assets/SomeOtherScene.unity"
             };
 
@@ -37,23 +38,24 @@ namespace DiveProtocol.Tests.EditMode
             Assert.That(BuildSceneConfiguration.StartsWithCoreScenes(composed, BuildSceneConfiguration.CoreBuildScenePaths), Is.True);
             Assert.That(composed, Has.Length.EqualTo(composed.Distinct().Count()));
             Assert.That(composed[0], Does.EndWith($"{SceneNames.Bootstrap}.unity"));
-            Assert.That(composed[2], Does.EndWith($"{SceneNames.Level01Drainage}.unity"));
-            Assert.That(composed[2], Does.Not.EndWith($"{SceneNames.DemoLevel}.unity"));
+            Assert.That(composed[3], Does.EndWith($"{SceneNames.Level02Containment}.unity"));
+            Assert.That(composed[3], Does.Not.EndWith($"{SceneNames.DemoLevel}.unity"));
             Assert.That(composed, Does.Contain("Assets/SomeOtherScene.unity"));
         }
 
         [Test]
-        public void BuildSceneOrderValidationRejectsMissingLevel01()
+        public void BuildSceneOrderValidationRejectsMissingStartingLevel()
         {
-            var configuredWithoutLevel01 = new[]
+            var configuredWithoutStartingLevel = new[]
             {
                 "Assets/_DiveProtocol/Scenes/System/SCN_Bootstrap.unity",
                 "Assets/_DiveProtocol/Scenes/System/SCN_MainMenu.unity",
+                "Assets/_DiveProtocol/Scenes/Levels/SCN_Loading.unity",
                 "Assets/_DiveProtocol/Scenes/Levels/SCN_DemoLevel.unity",
                 "Assets/_DiveProtocol/Scenes/System/SCN_Results.unity"
             };
 
-            Assert.That(BuildSceneConfiguration.StartsWithCoreScenes(configuredWithoutLevel01, BuildSceneConfiguration.CoreBuildScenePaths), Is.False);
+            Assert.That(BuildSceneConfiguration.StartsWithCoreScenes(configuredWithoutStartingLevel, BuildSceneConfiguration.CoreBuildScenePaths), Is.False);
         }
     }
 }

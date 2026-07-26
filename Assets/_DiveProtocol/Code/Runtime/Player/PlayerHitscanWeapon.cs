@@ -1,4 +1,5 @@
 using System;
+using DiveProtocol.Builds;
 using DiveProtocol.Gameplay;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +17,8 @@ namespace DiveProtocol
     [DisallowMultipleComponent]
     public sealed class PlayerHitscanWeapon : MonoBehaviour
     {
+        private const string DefaultGunshotResourcePath = "Audio/Weapons/371041__morganpurkis__single-gunshot-3";
+
 #if ENABLE_INPUT_SYSTEM
         [Header("Input")]
         [Tooltip("Input System action used to fire this weapon.")]
@@ -39,6 +42,24 @@ namespace DiveProtocol
 
         [SerializeField]
         private LayerMask hitMask = ~0;
+
+        [Header("Audio")]
+        [Tooltip("AudioSource used to play the gunshot. If empty, this object or a parent object is used.")]
+        [SerializeField]
+        private AudioSource gunshotAudioSource;
+
+        [Tooltip("Played once whenever a valid shot is fired.")]
+        [SerializeField]
+        private AudioClip gunshotClip;
+
+        [SerializeField, Range(0f, 1f)]
+        private float gunshotVolume = 0.35f;
+
+        [SerializeField, Min(0.01f)]
+        private float gunshotPitchMin = 0.98f;
+
+        [SerializeField, Min(0.01f)]
+        private float gunshotPitchMax = 1.02f;
 
         [Header("Hit Detection")]
         [Tooltip("When enabled, uses a SphereCast to make whitebox aiming less pixel-perfect.")]
@@ -90,9 +111,13 @@ namespace DiveProtocol
         /// Raised after current or maximum ammo changes.
         /// </summary>
         public event Action<int, int> AmmoChanged;
+        public event Action<WeaponHitInfo> HitConfirmed;
+        public event Action<GameObject> EnemyKilled;
 
         public int CurrentAmmo => currentAmmo;
         public int MaxAmmo => maxAmmo;
+        public float BaseDamage => damage;
+        public float Range => range;
         public bool HasAmmo => infiniteAmmo || !consumeAmmoOnFire || currentAmmo > 0;
         public bool CanFire =>
             _isFireEnabled &&
@@ -106,11 +131,15 @@ namespace DiveProtocol
         {
             maxAmmo = Mathf.Max(0, maxAmmo);
             currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+            gunshotVolume = Mathf.Min(gunshotVolume, 0.5f);
 
             if (fireOrigin == null)
             {
                 fireOrigin = transform;
             }
+
+            ResolveGunshotClip();
+            ResolveGunshotAudioSource();
         }
 
         private void OnEnable()
@@ -147,6 +176,7 @@ namespace DiveProtocol
 
             _nextAllowedFireTime = Time.time + fireIntervalSeconds;
             FireRaycast();
+            PlayGunshotAudio();
             onFired?.Invoke();
             return true;
         }
@@ -231,6 +261,26 @@ namespace DiveProtocol
             _isFireEnabled = enabled;
         }
 
+        /// <summary>
+        /// Gets the current aim ray used by this weapon.
+        /// </summary>
+        public bool TryGetAimRay(out Ray ray)
+        {
+            Transform origin = fireOrigin != null ? fireOrigin : transform;
+            Vector3 shotDirection = origin.forward.sqrMagnitude > 0f
+                ? origin.forward.normalized
+                : transform.forward.normalized;
+
+            if (shotDirection.sqrMagnitude <= 0.0001f)
+            {
+                ray = default;
+                return false;
+            }
+
+            ray = new Ray(origin.position, shotDirection);
+            return true;
+        }
+
         private void ConsumeAmmoForShot()
         {
             if (currentAmmo <= 0)
@@ -246,6 +296,62 @@ namespace DiveProtocol
         {
             AmmoChanged?.Invoke(currentAmmo, maxAmmo);
             onAmmoChanged?.Invoke();
+        }
+
+        private void PlayGunshotAudio()
+        {
+            ResolveGunshotClip();
+
+            if (gunshotClip == null)
+            {
+                return;
+            }
+
+            ResolveGunshotAudioSource();
+
+            if (gunshotAudioSource == null)
+            {
+                return;
+            }
+
+            float previousPitch = gunshotAudioSource.pitch;
+            gunshotAudioSource.pitch = UnityEngine.Random.Range(gunshotPitchMin, gunshotPitchMax);
+            gunshotAudioSource.PlayOneShot(gunshotClip, gunshotVolume);
+            gunshotAudioSource.pitch = previousPitch;
+        }
+
+        private void ResolveGunshotClip()
+        {
+            if (gunshotClip != null)
+            {
+                return;
+            }
+
+            gunshotClip = Resources.Load<AudioClip>(DefaultGunshotResourcePath);
+        }
+
+        private void ResolveGunshotAudioSource()
+        {
+            if (gunshotAudioSource != null)
+            {
+                return;
+            }
+
+            gunshotAudioSource = GetComponent<AudioSource>();
+
+            if (gunshotAudioSource == null)
+            {
+                gunshotAudioSource = GetComponentInParent<AudioSource>();
+            }
+
+            if (gunshotAudioSource == null)
+            {
+                gunshotAudioSource = gameObject.AddComponent<AudioSource>();
+                gunshotAudioSource.playOnAwake = false;
+                gunshotAudioSource.loop = false;
+                gunshotAudioSource.spatialBlend = 0f;
+                gunshotAudioSource.dopplerLevel = 0f;
+            }
         }
 
         private void FireRaycast()
@@ -274,11 +380,44 @@ namespace DiveProtocol
                 return;
             }
 
-            damageable.TakeDamage(new DamageInfo(
-                damage,
+            float finalDamage = damage;
+            PlayerBuildController buildController = GetComponentInParent<PlayerBuildController>();
+            DamageInfo damageInfo = new DamageInfo(
+                finalDamage,
                 gameObject,
                 hit.point,
-                shotDirection));
+                shotDirection,
+                DamageType.Gun);
+
+            if (buildController != null)
+            {
+                finalDamage *= Mathf.Max(0f, buildController.Modifiers.GetOutgoingGunDamageMultiplier(damageable, damageInfo));
+            }
+
+            bool wasAlive = damageable.IsAlive;
+            damageable.TakeDamage(new DamageInfo(
+                finalDamage,
+                gameObject,
+                hit.point,
+                shotDirection,
+                DamageType.Gun));
+
+            bool targetDied = wasAlive && !damageable.IsAlive;
+            WeaponHitInfo hitInfo = new WeaponHitInfo(
+                this,
+                damageable,
+                hit.collider,
+                finalDamage,
+                targetDied,
+                hit.point,
+                shotDirection);
+
+            HitConfirmed?.Invoke(hitInfo);
+
+            if (targetDied && damageable is Component targetComponent)
+            {
+                EnemyKilled?.Invoke(targetComponent.gameObject);
+            }
         }
 
         private bool TryGetFirstBlockingHit(
@@ -397,6 +536,9 @@ namespace DiveProtocol
             hitRadius = Mathf.Max(0f, hitRadius);
             maxAmmo = Mathf.Max(0, maxAmmo);
             currentAmmo = Mathf.Clamp(currentAmmo, 0, maxAmmo);
+            gunshotVolume = Mathf.Min(Mathf.Clamp01(gunshotVolume), 0.5f);
+            gunshotPitchMin = Mathf.Max(0.01f, gunshotPitchMin);
+            gunshotPitchMax = Mathf.Max(gunshotPitchMin, gunshotPitchMax);
         }
 #endif
     }

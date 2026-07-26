@@ -22,6 +22,8 @@ namespace DiveProtocol
         private Vector3 _latchedRight;
 
         public PlayerConfig Config => _config;
+        public float ExternalSpeedMultiplier { get; set; } = 1f;
+        public float CurrentHorizontalSpeed { get; private set; }
 
         private void Awake()
         {
@@ -85,7 +87,10 @@ namespace DiveProtocol
             }
 
             _verticalVelocity -= _config.Gravity * Time.deltaTime;
-            var velocity = moveDirection * _config.MoveSpeed + Vector3.up * _verticalVelocity;
+            float speedMultiplier = Mathf.Max(0f, ExternalSpeedMultiplier);
+            var horizontalVelocity = moveDirection * (_config.MoveSpeed * speedMultiplier);
+            CurrentHorizontalSpeed = horizontalVelocity.magnitude;
+            var velocity = horizontalVelocity + Vector3.up * _verticalVelocity;
             _characterController.Move(velocity * Time.deltaTime);
 
             if (_config.RotateTowardMovement && moveDirection.sqrMagnitude > 0.0001f)

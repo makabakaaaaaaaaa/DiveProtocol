@@ -36,7 +36,7 @@ namespace DiveProtocol.Tests.PlayMode
             Assert.That(Object.FindObjectsByType<AppRoot>(FindObjectsSortMode.None).Length, Is.EqualTo(1));
 
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             Assert.That(AppRoot.Instance, Is.SameAs(appRoot));
         }
 

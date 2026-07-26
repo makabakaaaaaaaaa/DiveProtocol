@@ -11,7 +11,14 @@ namespace DiveProtocol.Tests.PlayMode
     {
         private static readonly string[] _requiredScenes =
         {
-            SceneNames.Bootstrap, SceneNames.MainMenu, SceneNames.Level01Drainage, SceneNames.DemoLevel, SceneNames.Results
+            SceneNames.Bootstrap,
+            SceneNames.MainMenu,
+            "SCN_Loading",
+            SceneNames.Level02Containment,
+            SceneNames.Level01Drainage,
+            SceneNames.Level03MaintenanceTransfer,
+            SceneNames.Level04FacilityCore,
+            SceneNames.Results
         };
 
         internal static string CreateTemporarySaveDirectory()

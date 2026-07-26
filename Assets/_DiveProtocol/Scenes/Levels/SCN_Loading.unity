@@ -280,7 +280,7 @@ MonoBehaviour:
   progressText: {fileID: 395351674}
   presentationRoot: {fileID: 457592863}
   placeholderRoot: {fileID: 2107706623}
-  directOpenFallbackSceneName: SCN_L01_Drainage
+  directOpenFallbackSceneName: SCN_L02_Containment
 --- !u!4 &295324020
 Transform:
   m_ObjectHideFlags: 0

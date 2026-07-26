@@ -13,8 +13,11 @@ namespace DiveProtocol.Editor
         {
             $"{_systemFolder}/{SceneNames.Bootstrap}.unity",
             $"{_systemFolder}/{SceneNames.MainMenu}.unity",
+            $"{_levelsFolder}/SCN_Loading.unity",
+            $"{_levelsFolder}/{SceneNames.Level02Containment}.unity",
             $"{_levelsFolder}/{SceneNames.Level01Drainage}.unity",
-            $"{_levelsFolder}/{SceneNames.DemoLevel}.unity",
+            $"{_levelsFolder}/{SceneNames.Level03MaintenanceTransfer}.unity",
+            $"{_levelsFolder}/{SceneNames.Level04FacilityCore}.unity",
             $"{_systemFolder}/{SceneNames.Results}.unity"
         };
 

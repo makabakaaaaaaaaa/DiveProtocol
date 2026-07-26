@@ -24,7 +24,7 @@ namespace DiveProtocol.Tests.PlayMode
         public IEnumerator PlayerDeathSettlesCurrencyWithoutSuccessAndCannotResume()
         {
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             AppRoot.Instance.RunManager.CurrentRun.Score.AddBonusScore(100);
             Object.FindFirstObjectByType<DemoLevelController>().SimulateDeath();
             yield return SceneTestUtility.WaitForScene(SceneNames.Results);
@@ -39,7 +39,7 @@ namespace DiveProtocol.Tests.PlayMode
             yield return SceneTestUtility.WaitForScene(SceneNames.MainMenu);
             Assert.That(AppRoot.Instance.RunManager.CurrentRun, Is.Null);
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             Assert.That(AppRoot.Instance.RunManager.CurrentRun.CurrentLevelId, Is.EqualTo(RunFactory.InitialLevelId));
             Assert.That(AppRoot.Instance.RunManager.CurrentRun.Player.CurrentHealth,
                 Is.EqualTo(AppRoot.Instance.RunManager.CurrentRun.Player.MaxHealth));

@@ -1,4 +1,5 @@
 using System;
+using DiveProtocol.Builds;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -97,6 +98,12 @@ namespace DiveProtocol
                 return 0f;
             }
 
+            PlayerBuildController buildController = GetComponent<PlayerBuildController>();
+            if (buildController != null)
+            {
+                amount *= Mathf.Max(0f, buildController.Modifiers.GetHealingMultiplier());
+            }
+
             float previousHealth = _currentHealth;
             _currentHealth = Mathf.Clamp(_currentHealth + amount, 0f, maxHealth);
             float applied = _currentHealth - previousHealth;
@@ -177,12 +184,58 @@ namespace DiveProtocol
                 return false;
             }
 
-            ApplyDamage(new DamageInfo(amount, source, transform.position, Vector3.zero));
+            ApplyDamage(new DamageInfo(amount, source, transform.position, Vector3.zero, DamageType.BloodCost));
             return true;
+        }
+
+        /// <summary>
+        /// Spends health while preserving a requested minimum remaining value.
+        /// </summary>
+        public bool TrySpendHealth(float amount, float minimumRemaining, GameObject source = null)
+        {
+            if (!IsAlive || amount <= 0f || _currentHealth - amount < minimumRemaining)
+            {
+                return false;
+            }
+
+            ApplyDamage(new DamageInfo(amount, source, transform.position, Vector3.zero, DamageType.BloodCost));
+            return true;
+        }
+
+        /// <summary>
+        /// Adjusts maximum health and clamps current health to the new maximum.
+        /// </summary>
+        public float ModifyMaxHealth(float delta, float minimumMaxHealth = 1f)
+        {
+            float previousMaxHealth = maxHealth;
+            maxHealth = Mathf.Max(minimumMaxHealth, maxHealth + delta);
+            _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
+
+            if (!Mathf.Approximately(previousMaxHealth, maxHealth))
+            {
+                HealthChanged?.Invoke(this, _currentHealth, maxHealth);
+            }
+
+            return maxHealth;
         }
 
         private void ApplyDamage(DamageInfo damageInfo)
         {
+            PlayerBuildController buildController = GetComponent<PlayerBuildController>();
+            if (buildController != null)
+            {
+                float multiplier = Mathf.Max(0f, buildController.Modifiers.GetIncomingDamageMultiplier(damageInfo));
+                if (!Mathf.Approximately(multiplier, 1f))
+                {
+                    damageInfo = new DamageInfo(
+                        damageInfo.Amount * multiplier,
+                        damageInfo.Source,
+                        damageInfo.HitPoint,
+                        damageInfo.HitDirection,
+                        damageInfo.DamageType);
+                }
+            }
+
             float previousHealth = _currentHealth;
             _currentHealth = Mathf.Clamp(_currentHealth - damageInfo.Amount, 0f, maxHealth);
 

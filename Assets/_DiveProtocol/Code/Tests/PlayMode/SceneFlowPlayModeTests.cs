@@ -24,7 +24,7 @@ namespace DiveProtocol.Tests.PlayMode
         public IEnumerator BootstrapDemoResultsAndMainMenuFlowSettlesOnce()
         {
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             Assert.That(AppRoot.Instance.RunManager.CurrentRun.IsActive, Is.True);
 
             Object.FindFirstObjectByType<DemoLevelController>().CompleteDemo();
@@ -41,13 +41,13 @@ namespace DiveProtocol.Tests.PlayMode
         public IEnumerator RetryCreatesNewRunIdAndSeed()
         {
             Object.FindFirstObjectByType<MainMenuController>().NewRun();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             var oldRunId = AppRoot.Instance.RunManager.CurrentRun.RunId;
             var oldSeed = AppRoot.Instance.RunManager.CurrentRun.Seed;
             Object.FindFirstObjectByType<DemoLevelController>().CompleteDemo();
             yield return SceneTestUtility.WaitForScene(SceneNames.Results);
             Object.FindFirstObjectByType<ResultsController>().Retry();
-            yield return SceneTestUtility.WaitForScene(SceneNames.Level01Drainage);
+            yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
 
             Assert.That(AppRoot.Instance.RunManager.CurrentRun.RunId, Is.Not.EqualTo(oldRunId));
             Assert.That(AppRoot.Instance.RunManager.CurrentRun.Seed, Is.Not.EqualTo(oldSeed));
