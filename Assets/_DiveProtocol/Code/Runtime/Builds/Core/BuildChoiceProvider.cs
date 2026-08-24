@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace DiveProtocol.Builds
@@ -22,14 +23,27 @@ namespace DiveProtocol.Builds
             int seed,
             int choiceCount = 3)
         {
+            return GetChoices(
+                state != null ? state.OwnedUpgrades : null,
+                levelIndex,
+                seed,
+                choiceCount);
+        }
+
+        public IReadOnlyList<BuildUpgradeDefinition> GetChoices(
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades,
+            int levelIndex,
+            int seed,
+            int choiceCount = 3)
+        {
             List<BuildUpgradeDefinition> choices = new();
             choiceCount = Mathf.Max(1, choiceCount);
 
-            if (state == null || !HasAnyCore(state))
+            if (ownedUpgrades == null || !HasAnyCore(ownedUpgrades))
             {
                 for (int i = 0; i < CoreChoices.Length && choices.Count < choiceCount; i++)
                 {
-                    if (state == null || !state.HasUpgrade(CoreChoices[i]))
+                    if (ownedUpgrades == null || !ownedUpgrades.Contains(CoreChoices[i]))
                     {
                         choices.Add(BuildCatalog.Get(CoreChoices[i]));
                     }
@@ -43,7 +57,7 @@ namespace DiveProtocol.Builds
             for (int i = 0; i < BuildCatalog.AllDefinitions.Count; i++)
             {
                 BuildUpgradeDefinition definition = BuildCatalog.AllDefinitions[i];
-                if (state.HasUpgrade(definition.Id))
+                if (ownedUpgrades.Contains(definition.Id))
                 {
                     continue;
                 }
@@ -54,7 +68,7 @@ namespace DiveProtocol.Builds
                     continue;
                 }
 
-                if (state.HasBranchCore(definition.Branch))
+                if (HasBranchCore(ownedUpgrades, definition.Branch))
                 {
                     candidates.Add(definition);
                 }
@@ -78,11 +92,28 @@ namespace DiveProtocol.Builds
             return choices;
         }
 
-        private static bool HasAnyCore(PlayerBuildState state)
+        private static bool HasAnyCore(IReadOnlyCollection<BuildUpgradeId> ownedUpgrades)
         {
-            return state.HasBranchCore(BuildBranch.RedMarrow) ||
-                   state.HasBranchCore(BuildBranch.OpticNerve) ||
-                   state.HasBranchCore(BuildBranch.HumusSymbiosis);
+            return HasBranchCore(ownedUpgrades, BuildBranch.RedMarrow) ||
+                   HasBranchCore(ownedUpgrades, BuildBranch.OpticNerve) ||
+                   HasBranchCore(ownedUpgrades, BuildBranch.HumusSymbiosis);
+        }
+
+        private static bool HasBranchCore(
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades,
+            BuildBranch branch)
+        {
+            foreach (BuildUpgradeId id in ownedUpgrades)
+            {
+                if (BuildCatalog.TryGet(id, out BuildUpgradeDefinition definition) &&
+                    definition.Branch == branch &&
+                    definition.IsCore)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void AddUntilFull(

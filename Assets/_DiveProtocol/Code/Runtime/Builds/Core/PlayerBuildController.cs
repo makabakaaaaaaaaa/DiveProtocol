@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using DiveProtocol.Doors;
 
@@ -53,6 +54,28 @@ namespace DiveProtocol.Builds
         public void GrantUpgrade(BuildUpgradeId id)
         {
             state.GrantUpgrade(id);
+        }
+
+        /// <summary>
+        /// Replaces this transient player copy with the upgrades owned by the active run.
+        /// </summary>
+        public void ReplaceUpgrades(IReadOnlyCollection<BuildUpgradeId> upgrades)
+        {
+            state.ClearAllUpgrades();
+            if (upgrades == null)
+            {
+                return;
+            }
+
+            foreach (BuildUpgradeId id in upgrades)
+            {
+                state.GrantUpgrade(id);
+            }
+        }
+
+        public void ClearUpgrades()
+        {
+            state.ClearAllUpgrades();
         }
 
         public bool HasUpgrade(BuildUpgradeId id)

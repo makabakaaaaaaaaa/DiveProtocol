@@ -1,4 +1,5 @@
 using System;
+using DiveProtocol.Builds;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -52,6 +53,7 @@ namespace DiveProtocol
 
             player.SetMovementCamera(Camera.main);
             SpawnedPlayer = player.transform;
+            BuildRunBridge.EnsureAndSync(SpawnedPlayer, appRoot.RunManager.CurrentRun);
             PlayerSpawned?.Invoke(SpawnedPlayer);
             _onPlayerSpawned?.Invoke(SpawnedPlayer);
             Debug.Log($"[Player] Player positioned at spawn point '{_spawnPoint.name}'.");

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Linq;
+using DiveProtocol.Builds;
 using UnityEngine;
 
 namespace DiveProtocol.Tests.EditMode
@@ -64,6 +65,26 @@ namespace DiveProtocol.Tests.EditMode
                 Assert.That(runManager.EndRun(RunEndReason.Aborted), Is.True);
                 Assert.That(runManager.CurrentRun, Is.Null);
                 Assert.That(runManager.LastResult, Is.Null);
+            });
+        }
+
+        [Test]
+        public void EndedAndClearedRunsDiscardTemporaryBuilds()
+        {
+            WithRunManager((runManager, config) =>
+            {
+                Assert.That(runManager.StartNewRun(123), Is.True);
+                RunState endedRun = runManager.CurrentRun;
+                endedRun.BuildState.GrantUpgrade(BuildUpgradeId.RedMarrow_Overdraft);
+
+                Assert.That(runManager.EndRun(RunEndReason.PlayerDied), Is.True);
+                Assert.That(endedRun.BuildState.OwnedUpgrades, Is.Empty);
+
+                runManager.ClearRun();
+                Assert.That(runManager.StartNewRun(456), Is.True);
+                runManager.CurrentRun.BuildState.GrantUpgrade(BuildUpgradeId.OpticNerve_Calibration);
+                runManager.ClearRun();
+                Assert.That(runManager.CurrentRun, Is.Null);
             });
         }
 

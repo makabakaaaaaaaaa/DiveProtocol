@@ -1,4 +1,5 @@
 using System;
+using DiveProtocol.Builds;
 
 namespace DiveProtocol
 {
@@ -22,6 +23,7 @@ namespace DiveProtocol
             var environment = EnvironmentState.CreateFromSeed(seed);
             var inventory = new InventoryState();
             var score = new ScoreState();
+            var buildState = new RunBuildState();
 
             return new RunState(
                 seed,
@@ -32,7 +34,8 @@ namespace DiveProtocol
                 player,
                 environment,
                 inventory,
-                score);
+                score,
+                buildState);
         }
     }
 }

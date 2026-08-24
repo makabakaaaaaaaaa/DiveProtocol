@@ -1,4 +1,5 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+using DiveProtocol.Builds;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -216,6 +217,15 @@ namespace DiveProtocol
                 _lastOperationResult = _commands.AddAmmo()
                     ? $"Added {RunDebugCommands.DebugAmmoAmount} reserve ammo."
                     : "No active run.";
+            }
+
+            if (DrawButton("Open Build Choice (Test)"))
+            {
+                PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+                _lastOperationResult = player != null &&
+                                       BuildSelectionFlow.TryOpen(player.gameObject, 3)
+                    ? "Build choice opened."
+                    : "Could not open a build choice.";
             }
 
             if (DrawButton("Force Demo Complete"))

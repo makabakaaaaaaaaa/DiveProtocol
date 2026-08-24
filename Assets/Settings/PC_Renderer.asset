@@ -26,6 +26,46 @@ MonoBehaviour:
     _outlineColor: {r: 0.07169801, g: 0.06662504, b: 0.061552063, a: 1}
     _upscaleSharpness: 0.7
     _useHdrWhenAvailable: 1
+--- !u!114 &-2747785216214535078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c549ed938526744a8cb041b2ebf477f, type: 3}
+  m_Name: HandDrawnOutlineRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  _settings:
+    _enabled: 1
+    _applyToSceneView: 0
+    _logDebug: 0
+    _renderPassEvent: 550
+    _debugMode: 0
+    _outlineColor: {r: 0.09, g: 0.078, b: 0.059, a: 1}
+    _outlineOpacity: 0.7
+    _depthThreshold: 0.0001
+    _normalThreshold: 0.01
+    _depthEdgeStrength: 3
+    _normalEdgeStrength: 3
+    _nearThickness: 5
+    _farThickness: 5
+    _nearDistance: 2.5
+    _farDistance: 18
+    _noiseEnabled: 0
+    _noiseTexture: {fileID: 0}
+    _noiseScale: 1.8
+    _breakThreshold: 0.42
+    _breakSoftness: 0.08
+    _depthNoiseInfluence: 0.1
+    _normalNoiseInfluence: 0.55
+    _darkAreaSuppression: 0
+    _darkAreaStart: 0.02
+    _darkAreaEnd: 0.16
+  _outlineShader: {fileID: 4800000, guid: 602512e12cec42a48ad2dfdcfad81177, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,8 +92,9 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 7200000, guid: b9a23f869c4fd45f19c5ada54dd82176, type: 3}
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
-  - {fileID: -8410641145448750627}
-  m_RendererFeatureMap: ad6b866f10d7b46cdd213e907066478b
+  - {fileID: -2747785216214535078}
+  - {fileID: 7086950082290267997}
+  m_RendererFeatureMap: ad6b866f10d7b46c5a74767ce7e7ddd95d37d6338de75962
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -78,7 +119,47 @@ MonoBehaviour:
   m_DepthAttachmentFormat: 0
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 0
+  m_IntermediateTextureMode: 1
+--- !u!114 &7086950082290267997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822b21584760ea645b86d992652e2943, type: 3}
+  m_Name: YoOutlineRendererFeatureV2
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  _settings:
+    _enabled: 1
+    _applyToSceneView: 0
+    _enableDebugLogs: 0
+    _renderPassEvent: 550
+    _debugMode: 0
+    _outlineColor: {r: 0.09, g: 0.078, b: 0.059, a: 1}
+    _outlineOpacity: 0.7
+    _depthThreshold: 0.008
+    _normalThreshold: 0.18
+    _depthStrength: 1
+    _normalStrength: 0.65
+    _nearThickness: 1.8
+    _farThickness: 0.8
+    _nearDistance: 2.5
+    _farDistance: 18
+    _noiseEnabled: 0
+    _noiseTexture: {fileID: 0}
+    _noiseScale: 1.8
+    _breakThreshold: 0.42
+    _breakSoftness: 0.08
+    _depthNoiseInfluence: 0.1
+    _normalNoiseInfluence: 0.55
+    _darkAreaSuppression: 0.6
+    _darkAreaStart: 0.02
+    _darkAreaEnd: 0.16
+  _outlineShader: {fileID: 4800000, guid: 571039f6b3fd96b4fa09e994693c84e7, type: 3}
 --- !u!114 &7833122117494664109
 MonoBehaviour:
   m_ObjectHideFlags: 0

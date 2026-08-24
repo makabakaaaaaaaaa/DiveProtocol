@@ -227,6 +227,8 @@ MonoBehaviour:
   attackRange: 1.5
   attackCooldownSeconds: 1
   damage: 10
+  hitDelaySeconds: 0.35
+  requireTargetInRangeAtHit: 1
   onAttack:
     m_PersistentCalls:
       m_Calls: []
@@ -293,7 +295,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.35
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -395,9 +397,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d042c3917ca2b3f479d548614308912d, type: 3}
   - {fileID: 8300000, guid: 7a91bc5a5fdab394c9e6741b7820098f, type: 3}
   - {fileID: 8300000, guid: 2d0544f7c9d77cb4190c90b9eda2be77, type: 3}
+  _hitClips: []
+  _deathClip: {fileID: 0}
   _playOnlyWhenPlayerDetected: 1
   _stopWhenPlayerLost: 1
   _playOneShotOnFirstDetection: 1
+  _continuousWhilePlayerDetected: 1
   _firstDetectionDelayMin: 0
   _firstDetectionDelayMax: 0.4
   _minDelay: 6

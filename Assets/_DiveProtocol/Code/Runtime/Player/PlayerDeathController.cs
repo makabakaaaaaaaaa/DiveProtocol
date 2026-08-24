@@ -1,5 +1,6 @@
 using System.Collections;
 using System;
+using DiveProtocol.Builds;
 using DiveProtocol.UI;
 using UnityEngine;
 using UnityEngine.Events;
@@ -112,6 +113,12 @@ namespace DiveProtocol
             }
 
             IsDead = true;
+            if (AppRoot.TryGetInstance(out AppRoot appRoot))
+            {
+                appRoot.RunManager.ClearCurrentRunBuilds();
+            }
+
+            GetComponent<PlayerBuildController>()?.ClearUpgrades();
             GameplayPauseController.ForceResumeActivePause();
             DisableConfiguredBehaviours();
             DisableConfiguredObjects();

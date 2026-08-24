@@ -75,6 +75,7 @@ namespace DiveProtocol
             }
 
             LastResult = new RunResult(CurrentRun, endReason, DateTime.UtcNow);
+            CurrentRun.BuildState.Clear();
             return true;
         }
 
@@ -88,6 +89,7 @@ namespace DiveProtocol
             }
 
             var runId = CurrentRun.RunId;
+            CurrentRun.BuildState.Clear();
             if (!CurrentRun.Abort())
             {
                 Debug.LogError($"[Run] Failed to mark run {runId} as aborted.");
@@ -103,8 +105,17 @@ namespace DiveProtocol
         /// <summary>Clears all transient current-run and result data.</summary>
         public void ClearRun()
         {
+            CurrentRun?.BuildState.Clear();
             CurrentRun = null;
             LastResult = null;
+        }
+
+        /// <summary>
+        /// Clears the active run's temporary builds without changing the surrounding run flow.
+        /// </summary>
+        public void ClearCurrentRunBuilds()
+        {
+            CurrentRun?.BuildState.Clear();
         }
 
         private static bool TryApplyEndStatus(RunState runState, RunEndReason endReason)

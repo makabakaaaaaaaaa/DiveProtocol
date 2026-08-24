@@ -1,4 +1,5 @@
 using System;
+using DiveProtocol.Builds;
 
 namespace DiveProtocol
 {
@@ -15,7 +16,8 @@ namespace DiveProtocol
             PlayerRuntimeState player,
             EnvironmentState environment,
             InventoryState inventory,
-            ScoreState score)
+            ScoreState score,
+            RunBuildState buildState)
         {
             if (string.IsNullOrWhiteSpace(runId))
             {
@@ -42,6 +44,7 @@ namespace DiveProtocol
             Environment = environment ?? throw new ArgumentNullException(nameof(environment));
             Inventory = inventory ?? throw new ArgumentNullException(nameof(inventory));
             Score = score ?? throw new ArgumentNullException(nameof(score));
+            BuildState = buildState ?? throw new ArgumentNullException(nameof(buildState));
         }
 
         public int Seed { get; }
@@ -55,6 +58,7 @@ namespace DiveProtocol
         public EnvironmentState Environment { get; }
         public InventoryState Inventory { get; }
         public ScoreState Score { get; }
+        public RunBuildState BuildState { get; }
 
         /// <summary>Moves an active run to a specified level.</summary>
         public bool EnterLevel(string levelId, int levelIndex)
