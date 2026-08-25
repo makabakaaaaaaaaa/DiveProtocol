@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/_DiveProtocol/Scenes/Levels/System/SCN_Bootstrap.unity
     guid: f110b630f9fcf5c43a0372cd0dcdaef3
   - enabled: 1
-    path: Assets/_DiveProtocol/Scenes/Levels/System/SCN_MainMenu.unity
-    guid: 95e72387ea970124c86d2050480f44ac
+    path: Assets/_DiveProtocol/Scenes/Levels/MainMenu_Facility.unity
+    guid: 045d6fb416dc16345bbf3c8e585eb9f0
   - enabled: 1
     path: Assets/_DiveProtocol/Scenes/Levels/SCN_Loading.unity
     guid: 8d541f6593bf9204f9e34d7fd6053c57

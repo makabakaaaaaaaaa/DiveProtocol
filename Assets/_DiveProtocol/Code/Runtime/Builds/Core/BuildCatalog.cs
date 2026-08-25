@@ -2,171 +2,99 @@ using System.Collections.Generic;
 
 namespace DiveProtocol.Builds
 {
-    /// <summary>
-    /// Static runtime catalog for the first playable build set.
-    /// </summary>
+    /// <summary>Static runtime definitions for the fixed four-node build progression.</summary>
     public static class BuildCatalog
     {
         private static readonly List<BuildUpgradeDefinition> Definitions = new()
         {
-            new(
-                BuildUpgradeId.RedMarrow_Overdraft,
-                BuildBranch.RedMarrow,
-                BuildUpgradeKind.Core,
-                "赤髓透支",
-                "你的血液会替代钥匙、弹药与意志。",
-                "可消耗 HP 制造弹药；可对允许的非主线门执行血债强开；HP 低于 35% 时，枪械伤害 +20%，移动速度 +12%。",
-                0),
-            new(
-                BuildUpgradeId.RedMarrow_CoagulationReflex,
-                BuildBranch.RedMarrow,
-                BuildUpgradeKind.Component,
-                "凝血反射",
-                "主动失血后短暂变硬。",
-                "玩家主动消耗 HP 后，3 秒内受到伤害降低 30%。",
-                1,
-                BuildUpgradeId.RedMarrow_Overdraft),
-            new(
-                BuildUpgradeId.RedMarrow_ExcessAdrenaline,
-                BuildBranch.RedMarrow,
-                BuildUpgradeKind.Component,
-                "过量肾上腺",
-                "濒危时动作变得更快。",
-                "HP 低于 30% 时，Reload Speed +30%，Interaction Speed +25%。",
-                1,
-                BuildUpgradeId.RedMarrow_Overdraft),
-            new(
-                BuildUpgradeId.RedMarrow_BloodBulletCompression,
-                BuildBranch.RedMarrow,
-                BuildUpgradeKind.Component,
-                "血弹压缩",
-                "把更多东西塞进子弹里，也把代价塞进身体里。",
-                "用 HP 制造弹药时额外获得 2 发弹药，但下一次治疗效果降低 50%。",
-                1,
-                BuildUpgradeId.RedMarrow_Overdraft),
-            new(
-                BuildUpgradeId.RedMarrow_OrganCollateral,
-                BuildBranch.RedMarrow,
-                BuildUpgradeKind.Component,
-                "器官抵押",
-                "身体会自动拿未来换现在。",
-                "每关首次 HP 低于 20% 时立即恢复 10 HP，但本关最大 HP 降低 10 点。",
-                1,
-                BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_Overdraft, BuildBranch.RedMarrow, BuildUpgradeKind.Core,
+                "Blood Debt Core", "Low-health damage +20%, move speed +15%.",
+                "At or below 50% HP, gain 20% gun damage and 15% movement speed.", 0),
+            new(BuildUpgradeId.RedMarrow_BloodBulletCompression, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Blood Compression", "Max HP -10; gun damage +15%.",
+                "Compresses the body into a more dangerous weapon platform.", 1, BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_CoagulationReflex, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Coagulation Reflex", "Lethal damage leaves you at 1 HP. 60s cooldown.",
+                "A last reflex keeps the heart beating through a lethal hit.", 1, BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_OrganCollateral, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Blood Debt Transfer", "Health-spend actions cost 50% less HP.",
+                "Moves the immediate cost of blood debt away from the present moment.", 1, BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_ExcessAdrenaline, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Predatory Recovery", "Kills restore 5 HP.",
+                "Every confirmed kill buys the body a little more time.", 2, BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_BloodEconomy, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Lean Circulation", "Health-spend actions cost another 25% less HP.",
+                "A smaller payment keeps each blood action viable deeper in the facility.", 2, BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_LowHealthAmplifier, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Adrenal Overload", "Further improves low-health damage and movement.",
+                "Makes the Blood Debt threshold more dangerous to everything except you.", 2, BuildUpgradeId.RedMarrow_Overdraft),
+            new(BuildUpgradeId.RedMarrow_SacrificeProtocol, BuildBranch.RedMarrow, BuildUpgradeKind.Component,
+                "Sacrifice Protocol", "At 20% HP, gain +50% damage for 10 seconds.",
+                "The final reserve converts imminent collapse into a brief killing window.", 3, BuildUpgradeId.RedMarrow_Overdraft),
 
-            new(
-                BuildUpgradeId.OpticNerve_Calibration,
-                BuildBranch.OpticNerve,
-                BuildUpgradeKind.Core,
-                "视神经校准",
-                "你的眼睛会先于意识锁定危险。",
-                "瞄准敌人 0.8 秒后施加标记；被标记敌人受到枪械伤害 +15%；攻击被标记敌人时有 20% 概率返还 1 发弹药。",
-                0),
-            new(
-                BuildUpgradeId.OpticNerve_CalmShot,
-                BuildBranch.OpticNerve,
-                BuildUpgradeKind.Component,
-                "冷静射击",
-                "安静时，枪口知道自己该去哪里。",
-                "玩家站立或低速移动时开火，枪械伤害 +20%。",
-                1,
-                BuildUpgradeId.OpticNerve_Calibration),
-            new(
-                BuildUpgradeId.OpticNerve_JointRupture,
-                BuildBranch.OpticNerve,
-                BuildUpgradeKind.Component,
-                "关节破坏",
-                "连续命中会让目标失去节奏。",
-                "连续命中同一个敌人 2 次后，敌人移动速度降低 35%，持续 3 秒。",
-                1,
-                BuildUpgradeId.OpticNerve_Calibration),
-            new(
-                BuildUpgradeId.OpticNerve_MarkRecycle,
-                BuildBranch.OpticNerve,
-                BuildUpgradeKind.Component,
-                "标记回收",
-                "被确认的目标会把资源还给你。",
-                "击杀被标记敌人时恢复 1 发弹药，并触发 2 秒视野增强事件。",
-                1,
-                BuildUpgradeId.OpticNerve_Calibration),
-            new(
-                BuildUpgradeId.OpticNerve_SafeDistance,
-                BuildBranch.OpticNerve,
-                BuildUpgradeKind.Component,
-                "安全距离",
-                "距离给判断留出余地。",
-                "玩家与敌人距离超过 6 Unity Units 时命中，有 10% 概率造成 +50% 枪械伤害。",
-                1,
-                BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_Calibration, BuildBranch.OpticNerve, BuildUpgradeKind.Core,
+                "Clearance Core", "Aim at an enemy to mark it; marked targets take +15% damage.",
+                "Sustained aim locks a target after 0.8 seconds and exposes it to extra gun damage.", 0),
+            new(BuildUpgradeId.OpticNerve_CalmShot, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Neural Overclock", "Reload speed +25%.",
+                "The build modifier is ready for the existing reload path when that weapon action is enabled.", 1, BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_JointRupture, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Weak Point Analysis", "Marked hits gain a 25% chance to deal critical damage.",
+                "Marked anatomy reveals a second, more profitable line of fire.", 1, BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_MarkRecycle, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Recovery Protocol", "Killing a marked enemy restores 1 ammo.",
+                "Confirmed targets return a single round to the weapon reserve.", 1, BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_SafeDistance, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Long Sight", "Gun damage +20% beyond 6m.",
+                "Distance becomes a stable advantage instead of an uncertain gamble.", 2, BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_MarkPersistence, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Persistent Trace", "Marks last 8 seconds instead of 5.",
+                "A target remains legible long enough to turn information into action.", 2, BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_AimDiscipline, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Aim Discipline", "Marked-target damage gains another +10%.",
+                "Clear sight and patient aim compound into a more reliable kill.", 2, BuildUpgradeId.OpticNerve_Calibration),
+            new(BuildUpgradeId.OpticNerve_PerfectPrediction, BuildBranch.OpticNerve, BuildUpgradeKind.Component,
+                "Perfect Prediction", "The first hit on each marked target is a critical hit.",
+                "The opening shot arrives where the target was about to be.", 3, BuildUpgradeId.OpticNerve_Calibration),
 
-            new(
-                BuildUpgradeId.Humus_Sympathy,
-                BuildBranch.HumusSymbiosis,
-                BuildUpgradeKind.Core,
-                "腐殖共感",
-                "腐烂物不再排斥你。它们会认出你。",
-                "靠近尸体、污染物或生物组织时获得共感层数；每层环境伤害 -5%；每层对近距离敌人造成 1 点/秒污染伤害；最多 5 层。",
-                0),
-            new(
-                BuildUpgradeId.Humus_DeadMatterWhisper,
-                BuildBranch.HumusSymbiosis,
-                BuildUpgradeKind.Component,
-                "死物低语",
-                "死去的东西开始说话。",
-                "检查尸体或异常残留时，可以读取额外提示文本。",
-                1,
-                BuildUpgradeId.Humus_Sympathy),
-            new(
-                BuildUpgradeId.Humus_PollutionCoat,
-                BuildBranch.HumusSymbiosis,
-                BuildUpgradeKind.Component,
-                "污染外衣",
-                "靠近你时，它们会先碰到别的东西。",
-                "共感层数 >= 3 时，敌人第一次攻击玩家有 30% 概率被短暂硬直。",
-                1,
-                BuildUpgradeId.Humus_Sympathy),
-            new(
-                BuildUpgradeId.Humus_CadaverDelay,
-                BuildBranch.HumusSymbiosis,
-                BuildUpgradeKind.Component,
-                "借尸拖延",
-                "复苏的尸体会迟疑。",
-                "尸体复活时可进入 4 秒临时混乱状态，等待后续复活 AI 接入。",
-                1,
-                BuildUpgradeId.Humus_Sympathy),
-            new(
-                BuildUpgradeId.Humus_AbnormalMetabolism,
-                BuildBranch.HumusSymbiosis,
-                BuildUpgradeKind.Component,
-                "异常代谢",
-                "异常环境开始像营养液一样流动。",
-                "处于 AbnormalZone 内时缓慢恢复 HP，但武器精准度降低。",
-                1,
-                BuildUpgradeId.Humus_Sympathy)
+            new(BuildUpgradeId.Humus_Sympathy, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Core,
+                "Symbiosis Core", "Adaptation regeneration restores HP every second.",
+                "Regeneration is 1/2/3/4 HP per second in Drainage/Containment/Maintenance/Facility Core.", 0),
+            new(BuildUpgradeId.Humus_DeadMatterWhisper, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Decay Metabolism", "Adaptation regeneration gains +1 HP per second.",
+                "The body turns the facility's pressure into slow, persistent repair.", 1, BuildUpgradeId.Humus_Sympathy),
+            new(BuildUpgradeId.Humus_PollutionCoat, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Living Adaptation", "Incoming damage reduced by 15%.",
+                "The skin begins answering impacts before they fully register.", 1, BuildUpgradeId.Humus_Sympathy),
+            new(BuildUpgradeId.Humus_CadaverDelay, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Parasitic Response", "Enemy hits have a 25% chance to trigger a small counterattack.",
+                "Damage still lands; the attacker pays for staying close.", 1, BuildUpgradeId.Humus_Sympathy),
+            new(BuildUpgradeId.Humus_AbnormalMetabolism, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Accelerated Regeneration", "Adaptation regeneration gains another +1 HP per second.",
+                "The healing cadence becomes more insistent with every lower level.", 2, BuildUpgradeId.Humus_Sympathy),
+            new(BuildUpgradeId.Humus_ExpandedVessel, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Expanded Vessel", "Max HP +20.",
+                "The body grows a larger margin for continued adaptation.", 2, BuildUpgradeId.Humus_Sympathy),
+            new(BuildUpgradeId.Humus_EnvironmentalTolerance, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Environmental Tolerance", "Environmental damage reduced by 30%.",
+                "Hazards become less persuasive without requiring a special zone system.", 2, BuildUpgradeId.Humus_Sympathy),
+            new(BuildUpgradeId.Humus_CompleteSymbiosis, BuildBranch.HumusSymbiosis, BuildUpgradeKind.Component,
+                "Complete Symbiosis", "Facility Core regeneration is fixed at 4 HP per second.",
+                "The final adaptation reaches the Facility Core's intended sustained-recovery rate.", 3, BuildUpgradeId.Humus_Sympathy)
         };
 
         private static readonly Dictionary<BuildUpgradeId, BuildUpgradeDefinition> Lookup = BuildLookup();
 
         public static IReadOnlyList<BuildUpgradeDefinition> AllDefinitions => Definitions;
 
-        public static bool TryGet(BuildUpgradeId id, out BuildUpgradeDefinition definition)
-        {
-            return Lookup.TryGetValue(id, out definition);
-        }
+        public static bool TryGet(BuildUpgradeId id, out BuildUpgradeDefinition definition) => Lookup.TryGetValue(id, out definition);
 
-        public static BuildUpgradeDefinition Get(BuildUpgradeId id)
-        {
-            return Lookup[id];
-        }
+        public static BuildUpgradeDefinition Get(BuildUpgradeId id) => Lookup[id];
 
         private static Dictionary<BuildUpgradeId, BuildUpgradeDefinition> BuildLookup()
         {
-            Dictionary<BuildUpgradeId, BuildUpgradeDefinition> lookup = new();
-            for (int i = 0; i < Definitions.Count; i++)
-            {
-                lookup[Definitions[i].Id] = Definitions[i];
-            }
-
+            var lookup = new Dictionary<BuildUpgradeId, BuildUpgradeDefinition>();
+            foreach (BuildUpgradeDefinition definition in Definitions) lookup[definition.Id] = definition;
             return lookup;
         }
     }

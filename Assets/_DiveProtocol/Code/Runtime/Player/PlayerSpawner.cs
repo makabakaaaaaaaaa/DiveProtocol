@@ -17,6 +17,11 @@ namespace DiveProtocol
         [SerializeField] private PlayerSpawnPoint _spawnPoint;
         [SerializeField] private TransformEvent _onPlayerSpawned;
 
+        private const float GroundRaycastStartHeight = 1f;
+        private const float GroundRaycastDistance = 6f;
+        private const float MinimumGroundClearance = 0.03f;
+        private const float MaximumGroundClearance = 0.1f;
+
         public Transform SpawnedPlayer { get; private set; }
 
         /// <summary>
@@ -46,10 +51,8 @@ namespace DiveProtocol
                 player = Instantiate(_playerPrefab, _spawnPoint.transform.position, _spawnPoint.transform.rotation);
                 player.gameObject.name = _playerPrefab.gameObject.name;
             }
-            else
-            {
-                MoveToSpawnPoint(player);
-            }
+
+            PlacePlayerAtSpawnSafely(player);
 
             player.SetMovementCamera(Camera.main);
             SpawnedPlayer = player.transform;
@@ -59,20 +62,81 @@ namespace DiveProtocol
             Debug.Log($"[Player] Player positioned at spawn point '{_spawnPoint.name}'.");
         }
 
-        private void MoveToSpawnPoint(PlayerMovement player)
+        /// <summary>
+        /// Places either a fresh or existing player at the spawn marker with its controller bottom slightly above real ground.
+        /// </summary>
+        private void PlacePlayerAtSpawnSafely(PlayerMovement player)
         {
-            var controller = player.GetComponent<CharacterController>();
-            if (controller != null)
+            CharacterController controller = player.GetComponent<CharacterController>();
+            bool controllerWasEnabled = controller != null && controller.enabled;
+            if (controllerWasEnabled)
             {
                 controller.enabled = false;
             }
 
             player.transform.SetPositionAndRotation(_spawnPoint.transform.position, _spawnPoint.transform.rotation);
+            Physics.SyncTransforms();
 
-            if (controller != null)
+            if (controller != null && TryFindGroundBelowSpawn(player.transform, out RaycastHit groundHit))
+            {
+                float desiredBottomY = groundHit.point.y + GetGroundClearance(controller, player.transform);
+                float currentBottomY = GetControllerBottomWorldY(controller, player.transform);
+                player.transform.position += Vector3.up * (desiredBottomY - currentBottomY);
+                Physics.SyncTransforms();
+            }
+            else
+            {
+                Debug.LogWarning($"[PlayerSpawner] No valid ground found below spawn point: {_spawnPoint.name}", this);
+            }
+
+            if (controllerWasEnabled)
             {
                 controller.enabled = true;
             }
+
+            player.ResetVerticalVelocity();
+        }
+
+        private bool TryFindGroundBelowSpawn(Transform player, out RaycastHit groundHit)
+        {
+            Vector3 rayOrigin = _spawnPoint.transform.position + Vector3.up * GroundRaycastStartHeight;
+            RaycastHit[] hits = Physics.RaycastAll(
+                rayOrigin,
+                Vector3.down,
+                GroundRaycastDistance,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore);
+            Array.Sort(hits, (left, right) => left.distance.CompareTo(right.distance));
+
+            foreach (RaycastHit hit in hits)
+            {
+                Collider collider = hit.collider;
+                if (collider == null ||
+                    collider.isTrigger ||
+                    collider.transform.IsChildOf(player) ||
+                    Vector3.Dot(hit.normal, Vector3.up) < 0.5f)
+                {
+                    continue;
+                }
+
+                groundHit = hit;
+                return true;
+            }
+
+            groundHit = default;
+            return false;
+        }
+
+        private static float GetControllerBottomWorldY(CharacterController controller, Transform player)
+        {
+            Vector3 localBottom = controller.center - Vector3.up * (controller.height * 0.5f);
+            return player.TransformPoint(localBottom).y;
+        }
+
+        private static float GetGroundClearance(CharacterController controller, Transform player)
+        {
+            float worldSkinWidth = controller.skinWidth * Mathf.Abs(player.lossyScale.y);
+            return Mathf.Clamp(worldSkinWidth, MinimumGroundClearance, MaximumGroundClearance);
         }
     }
 }

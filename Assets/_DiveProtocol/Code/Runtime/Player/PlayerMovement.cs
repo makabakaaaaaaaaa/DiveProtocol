@@ -109,6 +109,12 @@ namespace DiveProtocol
             _missingCameraLogged = false;
         }
 
+        /// <summary>Clears accumulated vertical movement after an external spawn or reposition operation.</summary>
+        public void ResetVerticalVelocity()
+        {
+            _verticalVelocity = 0f;
+        }
+
         private Vector3 CalculateMoveDirection(Vector2 rawInput)
         {
             var normalizedInput = PlayerMovementMath.NormalizeMoveInput(rawInput);

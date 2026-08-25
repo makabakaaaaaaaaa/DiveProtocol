@@ -11,22 +11,24 @@ namespace DiveProtocol.Builds
     {
         private const float AmmoHealthCost = 6f;
         private const int AmmoGain = 4;
-        private const int CompressedAmmoBonus = 2;
         private const float DoorHealthCost = 8f;
-        private const float LowHealthThreshold = 0.35f;
-        private const float AdrenalineThreshold = 0.30f;
-        private const float OrganCollateralThreshold = 0.20f;
+        private const float LowHealthThreshold = 0.50f;
+        private const float SacrificeThreshold = 0.20f;
         private const float MinimumRemainingHealth = 10f;
         private const float AmmoCooldownSeconds = 6f;
-        private const float CoagulationDurationSeconds = 3f;
+        private const float LethalSaveCooldownSeconds = 60f;
+        private const float KillRecoveryHealth = 5f;
+        private const float SacrificeDurationSeconds = 10f;
 
         private PlayerBuildController _buildController;
         private HealthComponent _health;
         private PlayerHitscanWeapon _weapon;
         private float _nextAmmoSpendTime;
-        private float _coagulationUntilTime;
+        private float _nextLethalSaveTime;
+        private float _sacrificeUntilTime;
         private bool _nextHealingPenalty;
-        private bool _organCollateralTriggeredThisLevel;
+        private bool _bloodCompressionApplied;
+        private bool _wasBelowSacrificeThreshold;
 
         public event Action<BloodDebtSpendType> HealthSpent;
 
@@ -36,14 +38,7 @@ namespace DiveProtocol.Builds
             _health.MaxHealth > 0f &&
             _health.CurrentHealth / _health.MaxHealth <= LowHealthThreshold;
 
-        public bool IsAdrenalineActive =>
-            _buildController != null &&
-            _buildController.HasUpgrade(BuildUpgradeId.RedMarrow_ExcessAdrenaline) &&
-            _health != null &&
-            _health.MaxHealth > 0f &&
-            _health.CurrentHealth / _health.MaxHealth <= AdrenalineThreshold;
-
-        public bool IsCoagulationActive => Time.time < _coagulationUntilTime;
+        public bool IsSacrificeActive => Time.time < _sacrificeUntilTime;
         public bool HasPendingHealingPenalty => _nextHealingPenalty;
 
         private bool HasCore =>
@@ -63,6 +58,17 @@ namespace DiveProtocol.Builds
             {
                 _health.HealthChanged += HandleHealthChanged;
             }
+
+            if (_weapon != null)
+            {
+                _weapon.EnemyKilled += HandleEnemyKilled;
+            }
+
+            if (_buildController != null)
+            {
+                _buildController.State.UpgradeGranted += HandleUpgradeGranted;
+                ApplyPermanentUpgrades();
+            }
         }
 
         private void OnDisable()
@@ -70,6 +76,16 @@ namespace DiveProtocol.Builds
             if (_health != null)
             {
                 _health.HealthChanged -= HandleHealthChanged;
+            }
+
+            if (_weapon != null)
+            {
+                _weapon.EnemyKilled -= HandleEnemyKilled;
+            }
+
+            if (_buildController != null)
+            {
+                _buildController.State.UpgradeGranted -= HandleUpgradeGranted;
             }
         }
 
@@ -83,19 +99,12 @@ namespace DiveProtocol.Builds
                 return false;
             }
 
-            if (!_health.TrySpendHealth(AmmoHealthCost, MinimumRemainingHealth, gameObject))
+            if (!_health.TrySpendHealth(GetHealthSpendCost(AmmoHealthCost), MinimumRemainingHealth, gameObject))
             {
                 return false;
             }
 
-            int ammoAmount = AmmoGain;
-            if (_buildController.HasUpgrade(BuildUpgradeId.RedMarrow_BloodBulletCompression))
-            {
-                ammoAmount += CompressedAmmoBonus;
-                _nextHealingPenalty = true;
-            }
-
-            _weapon.TryAddAmmo(ammoAmount);
+            _weapon.TryAddAmmo(AmmoGain);
             _nextAmmoSpendTime = Time.time + AmmoCooldownSeconds;
             TriggerSpend(BloodDebtSpendType.Ammo);
             return true;
@@ -118,7 +127,7 @@ namespace DiveProtocol.Builds
                 return false;
             }
 
-            float cost = Mathf.Max(0f, bypass.HpCost > 0 ? bypass.HpCost : DoorHealthCost);
+            float cost = GetHealthSpendCost(Mathf.Max(0f, bypass.HpCost > 0 ? bypass.HpCost : DoorHealthCost));
             if (!_health.TrySpendHealth(cost, MinimumRemainingHealth, gameObject))
             {
                 return false;
@@ -141,39 +150,94 @@ namespace DiveProtocol.Builds
             return 0.5f;
         }
 
-        /// <summary>
-        /// Resets per-level Red Marrow state.
-        /// </summary>
+        /// <summary>Resets transient low-health activation state for a new scene.</summary>
         public void ResetLevelState()
         {
-            _organCollateralTriggeredThisLevel = false;
+            _wasBelowSacrificeThreshold = false;
+            _sacrificeUntilTime = 0f;
+        }
+
+        /// <summary>Consumes the Coagulation Reflex lethal save when its cooldown is ready.</summary>
+        public bool TryPreventLethalDamage()
+        {
+            if (_buildController == null ||
+                !_buildController.HasUpgrade(BuildUpgradeId.RedMarrow_CoagulationReflex) ||
+                Time.time < _nextLethalSaveTime)
+            {
+                return false;
+            }
+
+            _nextLethalSaveTime = Time.time + LethalSaveCooldownSeconds;
+            _health?.SetInvulnerableFor(0.15f);
+            return true;
         }
 
         private void TriggerSpend(BloodDebtSpendType spendType)
         {
-            if (_buildController != null &&
-                _buildController.HasUpgrade(BuildUpgradeId.RedMarrow_CoagulationReflex))
-            {
-                _coagulationUntilTime = Time.time + CoagulationDurationSeconds;
-            }
-
             HealthSpent?.Invoke(spendType);
         }
 
         private void HandleHealthChanged(HealthComponent health, float currentHealth, float maxHealth)
         {
-            if (_organCollateralTriggeredThisLevel ||
-                _buildController == null ||
-                !_buildController.HasUpgrade(BuildUpgradeId.RedMarrow_OrganCollateral) ||
-                maxHealth <= 0f ||
-                currentHealth / maxHealth > OrganCollateralThreshold)
+            if (_buildController == null || maxHealth <= 0f)
             {
                 return;
             }
 
-            _organCollateralTriggeredThisLevel = true;
-            _health.ModifyMaxHealth(-10f, 30f);
-            _health.Heal(10f);
+            bool belowSacrificeThreshold = currentHealth / maxHealth <= SacrificeThreshold;
+            if (_buildController.HasUpgrade(BuildUpgradeId.RedMarrow_SacrificeProtocol) &&
+                belowSacrificeThreshold &&
+                !_wasBelowSacrificeThreshold)
+            {
+                _sacrificeUntilTime = Time.time + SacrificeDurationSeconds;
+            }
+
+            _wasBelowSacrificeThreshold = belowSacrificeThreshold;
+        }
+
+        private void HandleEnemyKilled(GameObject enemy)
+        {
+            if (_buildController != null &&
+                _buildController.HasUpgrade(BuildUpgradeId.RedMarrow_ExcessAdrenaline))
+            {
+                _health?.Heal(KillRecoveryHealth);
+            }
+        }
+
+        private void HandleUpgradeGranted(BuildUpgradeId id)
+        {
+            if (id == BuildUpgradeId.RedMarrow_BloodBulletCompression)
+            {
+                ApplyPermanentUpgrades();
+            }
+        }
+
+        private void ApplyPermanentUpgrades()
+        {
+            if (_bloodCompressionApplied || _buildController == null || _health == null ||
+                !_buildController.HasUpgrade(BuildUpgradeId.RedMarrow_BloodBulletCompression))
+            {
+                return;
+            }
+
+            _bloodCompressionApplied = true;
+            _health.ModifyMaxHealth(-10f, 10f);
+        }
+
+        private float GetHealthSpendCost(float baseCost)
+        {
+            float multiplier = 1f;
+            if (_buildController != null && _buildController.HasUpgrade(BuildUpgradeId.RedMarrow_OrganCollateral))
+            {
+                multiplier *= 0.5f;
+            }
+
+            if (_buildController != null && _buildController.HasUpgrade(BuildUpgradeId.RedMarrow_BloodEconomy))
+            {
+                multiplier *= 0.75f;
+            }
+
+            return baseCost * multiplier;
         }
     }
 }

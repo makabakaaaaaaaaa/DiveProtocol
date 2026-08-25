@@ -2,6 +2,7 @@ using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 
 namespace DiveProtocol.Tests.PlayMode
 {
@@ -21,9 +22,13 @@ namespace DiveProtocol.Tests.PlayMode
         public IEnumerator TearDown() => SceneTestUtility.Cleanup(_saveDirectory);
 
         [UnityTest]
-        public IEnumerator BootstrapDemoResultsAndMainMenuFlowSettlesOnce()
+        public IEnumerator BootstrapFacilityMenuNewDescentResultsAndMainMenuFlowSettlesOnce()
         {
-            Object.FindFirstObjectByType<MainMenuController>().NewRun();
+            Button newDescentButton = GameObject.Find("NEW DESCENT")?.GetComponent<Button>();
+            Assert.That(newDescentButton, Is.Not.Null, "MainMenu_Facility must expose its NEW DESCENT Button.");
+            Assert.That(newDescentButton.interactable, Is.True);
+
+            newDescentButton.onClick.Invoke();
             yield return SceneTestUtility.WaitForScene(SceneNames.Level02Containment);
             Assert.That(AppRoot.Instance.RunManager.CurrentRun.IsActive, Is.True);
 

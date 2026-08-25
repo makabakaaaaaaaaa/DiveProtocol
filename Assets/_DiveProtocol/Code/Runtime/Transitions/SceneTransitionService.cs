@@ -32,6 +32,9 @@ namespace DiveProtocol
             _lastRequestFrame = Time.frameCount;
             SceneTransitionContext.SetPendingTransition(profile);
             GameplayPauseController.ForceResumeActivePause();
+            LoadingScreenOverlayService.Show(
+                profile.TransitionTitle,
+                profile.TransitionDescription);
 
             SceneManager.LoadScene(profile.LoadingSceneName, LoadSceneMode.Single);
             return true;

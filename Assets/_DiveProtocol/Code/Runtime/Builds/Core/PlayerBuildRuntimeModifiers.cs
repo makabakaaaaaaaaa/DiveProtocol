@@ -8,14 +8,17 @@ namespace DiveProtocol.Builds
     public sealed class PlayerBuildRuntimeModifiers
     {
         private const float RedMarrowLowHealthGunMultiplier = 1.20f;
-        private const float RedMarrowLowHealthMoveMultiplier = 1.12f;
-        private const float CoagulationIncomingMultiplier = 0.70f;
-        private const float AdrenalineReloadMultiplier = 1.30f;
-        private const float AdrenalineInteractionMultiplier = 1.25f;
-        private const float CalmShotMultiplier = 1.20f;
+        private const float RedMarrowLowHealthMoveMultiplier = 1.15f;
+        private const float BloodCompressionGunMultiplier = 1.15f;
+        private const float LowHealthAmplifierGunMultiplier = 1.15f;
+        private const float LowHealthAmplifierMoveMultiplier = 1.10f;
+        private const float SacrificeGunMultiplier = 1.50f;
+        private const float CalmShotMultiplier = 1.25f;
         private const float SafeDistance = 6f;
-        private const float SafeDistanceCritChance = 0.10f;
-        private const float SafeDistanceCritMultiplier = 1.50f;
+        private const float SafeDistanceMultiplier = 1.20f;
+        private const float WeakPointCritChance = 0.25f;
+        private const float WeakPointCritMultiplier = 1.50f;
+        private const float PerfectPredictionCritMultiplier = 2f;
 
         private readonly PlayerBuildController _controller;
 
@@ -36,11 +39,36 @@ namespace DiveProtocol.Builds
             if (_controller.BloodDebt != null && _controller.BloodDebt.IsLowHealthActive)
             {
                 multiplier *= RedMarrowLowHealthGunMultiplier;
+                if (_controller.HasUpgrade(BuildUpgradeId.RedMarrow_LowHealthAmplifier))
+                {
+                    multiplier *= LowHealthAmplifierGunMultiplier;
+                }
+            }
+
+            if (_controller.HasUpgrade(BuildUpgradeId.RedMarrow_BloodBulletCompression))
+            {
+                multiplier *= BloodCompressionGunMultiplier;
+            }
+
+            if (_controller.BloodDebt != null && _controller.BloodDebt.IsSacrificeActive)
+            {
+                multiplier *= SacrificeGunMultiplier;
             }
 
             if (_controller.OpticNerve != null)
             {
                 multiplier *= _controller.OpticNerve.GetMarkedDamageMultiplier(target);
+                if (_controller.OpticNerve.IsMarked(target) &&
+                    _controller.HasUpgrade(BuildUpgradeId.OpticNerve_JointRupture) &&
+                    Random.value <= WeakPointCritChance)
+                {
+                    multiplier *= WeakPointCritMultiplier;
+                }
+
+                if (_controller.OpticNerve.TryConsumePerfectPrediction(target))
+                {
+                    multiplier *= PerfectPredictionCritMultiplier;
+                }
             }
 
             if (_controller.HasUpgrade(BuildUpgradeId.OpticNerve_CalmShot) &&
@@ -53,9 +81,9 @@ namespace DiveProtocol.Builds
                 target is Component targetComponent)
             {
                 float distance = Vector3.Distance(_controller.transform.position, targetComponent.transform.position);
-                if (distance > SafeDistance && Random.value <= SafeDistanceCritChance)
+                if (distance > SafeDistance)
                 {
-                    multiplier *= SafeDistanceCritMultiplier;
+                    multiplier *= SafeDistanceMultiplier;
                 }
             }
 
@@ -68,7 +96,13 @@ namespace DiveProtocol.Builds
                 _controller.BloodDebt != null &&
                 _controller.BloodDebt.IsLowHealthActive)
             {
-                return RedMarrowLowHealthMoveMultiplier;
+                float multiplier = RedMarrowLowHealthMoveMultiplier;
+                if (_controller.HasUpgrade(BuildUpgradeId.RedMarrow_LowHealthAmplifier))
+                {
+                    multiplier *= LowHealthAmplifierMoveMultiplier;
+                }
+
+                return multiplier;
             }
 
             return 1f;
@@ -88,14 +122,9 @@ namespace DiveProtocol.Builds
 
             float multiplier = 1f;
 
-            if (_controller.BloodDebt != null && _controller.BloodDebt.IsCoagulationActive)
+            if (_controller.Symbiosis != null)
             {
-                multiplier *= CoagulationIncomingMultiplier;
-            }
-
-            if (_controller.Symbiosis != null && info.DamageType == DamageType.Environmental)
-            {
-                multiplier *= _controller.Symbiosis.GetEnvironmentalDamageMultiplier();
+                multiplier *= _controller.Symbiosis.GetIncomingDamageMultiplier(info);
             }
 
             return multiplier;
@@ -113,31 +142,19 @@ namespace DiveProtocol.Builds
 
         public float GetInteractionSpeedMultiplier()
         {
-            return _controller != null &&
-                   _controller.BloodDebt != null &&
-                   _controller.BloodDebt.IsAdrenalineActive
-                ? AdrenalineInteractionMultiplier
-                : 1f;
+            return 1f;
         }
 
         public float GetReloadSpeedMultiplier()
         {
-            return _controller != null &&
-                   _controller.BloodDebt != null &&
-                   _controller.BloodDebt.IsAdrenalineActive
-                ? AdrenalineReloadMultiplier
+            return _controller != null && _controller.HasUpgrade(BuildUpgradeId.OpticNerve_CalmShot)
+                ? CalmShotMultiplier
                 : 1f;
         }
 
         public float GetWeaponSpreadMultiplier()
         {
-            float multiplier = 1f;
-            if (_controller != null && _controller.Symbiosis != null)
-            {
-                multiplier *= _controller.Symbiosis.GetWeaponSpreadMultiplier();
-            }
-
-            return multiplier;
+            return 1f;
         }
     }
 }

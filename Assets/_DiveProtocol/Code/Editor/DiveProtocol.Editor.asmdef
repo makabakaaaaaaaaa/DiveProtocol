@@ -3,7 +3,9 @@
     "rootNamespace": "DiveProtocol.Editor",
     "references": [
         "DiveProtocol.Runtime",
-        "UnityEngine.UI"
+        "UnityEngine.UI",
+        "Unity.TextMeshPro",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"

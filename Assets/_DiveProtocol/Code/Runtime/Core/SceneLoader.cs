@@ -9,6 +9,10 @@ namespace DiveProtocol
     /// <summary>Serializes asynchronous scene loads and coordinates loading state.</summary>
     public sealed class SceneLoader : MonoBehaviour
     {
+        [Header("Loading Presentation")]
+        [SerializeField, Min(0f)]
+        private float minimumOverlayDisplaySeconds = 1f;
+
         private GameStateMachine _stateMachine;
         private bool _isLoading;
 
@@ -20,7 +24,10 @@ namespace DiveProtocol
         }
 
         /// <summary>Starts loading a build scene if no other load is active.</summary>
-        public bool LoadScene(string sceneName, GameState targetState)
+        public bool LoadScene(
+            string sceneName,
+            GameState targetState,
+            bool showLoadingOverlay = true)
         {
             if (_stateMachine == null)
             {
@@ -48,12 +55,26 @@ namespace DiveProtocol
 
             GameplayPauseController.ForceResumeActivePause();
             _isLoading = true;
+            if (showLoadingOverlay)
+            {
+                LoadingScreenOverlayService.Show(
+                    "LOADING FACILITY DATA",
+                    $"TARGET: {sceneName}");
+            }
             Debug.Log($"[Scene] Loading {sceneName} with Single mode");
-            StartCoroutine(LoadSceneRoutine(sceneName, targetState, previousState));
+            StartCoroutine(LoadSceneRoutine(
+                sceneName,
+                targetState,
+                previousState,
+                showLoadingOverlay));
             return true;
         }
 
-        private IEnumerator LoadSceneRoutine(string sceneName, GameState targetState, GameState fallbackState)
+        private IEnumerator LoadSceneRoutine(
+            string sceneName,
+            GameState targetState,
+            GameState fallbackState,
+            bool showLoadingOverlay)
         {
             AsyncOperation operation;
 
@@ -63,6 +84,10 @@ namespace DiveProtocol
             }
             catch (Exception exception)
             {
+                if (showLoadingOverlay)
+                {
+                    LoadingScreenOverlayService.Hide();
+                }
                 _isLoading = false;
                 _stateMachine.TryTransition(fallbackState);
                 Debug.LogException(exception);
@@ -71,15 +96,42 @@ namespace DiveProtocol
 
             if (operation == null)
             {
+                if (showLoadingOverlay)
+                {
+                    LoadingScreenOverlayService.Hide();
+                }
                 _isLoading = false;
                 _stateMachine.TryTransition(fallbackState);
                 Debug.LogError($"Unity did not create an async load operation for scene '{sceneName}'.");
                 yield break;
             }
 
+            float overlayShownAt = Time.unscaledTime;
             while (!operation.isDone)
             {
+                if (showLoadingOverlay)
+                {
+                    LoadingScreenOverlayService.SetProgress(
+                        Mathf.Clamp01(operation.progress / 0.9f));
+                }
                 yield return null;
+            }
+
+            if (showLoadingOverlay)
+            {
+                LoadingScreenOverlayService.SetProgress(1f);
+                float remainingDisplayTime =
+                    minimumOverlayDisplaySeconds -
+                    (Time.unscaledTime - overlayShownAt);
+                while (remainingDisplayTime > 0f)
+                {
+                    yield return null;
+                    remainingDisplayTime =
+                        minimumOverlayDisplaySeconds -
+                        (Time.unscaledTime - overlayShownAt);
+                }
+
+                LoadingScreenOverlayService.Hide();
             }
 
             _isLoading = false;
@@ -102,5 +154,13 @@ namespace DiveProtocol
                 Debug.LogError($"Scene '{sceneName}' loaded, but transition to {targetState} failed.");
             }
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            minimumOverlayDisplaySeconds =
+                Mathf.Max(0f, minimumOverlayDisplaySeconds);
+        }
+#endif
     }
 }

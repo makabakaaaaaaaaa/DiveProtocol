@@ -49,7 +49,7 @@ namespace DiveProtocol.Tests.EditMode
             var configuredWithoutStartingLevel = new[]
             {
                 "Assets/_DiveProtocol/Scenes/System/SCN_Bootstrap.unity",
-                "Assets/_DiveProtocol/Scenes/System/SCN_MainMenu.unity",
+                "Assets/_DiveProtocol/Scenes/Levels/MainMenu_Facility.unity",
                 "Assets/_DiveProtocol/Scenes/Levels/SCN_Loading.unity",
                 "Assets/_DiveProtocol/Scenes/Levels/SCN_DemoLevel.unity",
                 "Assets/_DiveProtocol/Scenes/System/SCN_Results.unity"

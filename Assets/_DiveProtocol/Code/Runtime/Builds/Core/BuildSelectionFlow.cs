@@ -11,8 +11,19 @@ namespace DiveProtocol.Builds
     {
         private static readonly BuildChoiceProvider ChoiceProvider = new();
 
+        /// <summary>Compatibility entry point for debug callers; uses the active scene's configured node.</summary>
         public static bool TryOpen(
             GameObject interactor,
+            int choiceCount,
+            Action selectionCompleted = null)
+        {
+            return LevelBuildSelectionCatalog.TryGetForActiveScene(out LevelBuildSelectionDefinition definition) &&
+                   TryOpen(interactor, definition, choiceCount, selectionCompleted);
+        }
+
+        public static bool TryOpen(
+            GameObject interactor,
+            LevelBuildSelectionDefinition definition,
             int choiceCount,
             Action selectionCompleted = null)
         {
@@ -33,9 +44,14 @@ namespace DiveProtocol.Builds
                 return false;
             }
 
+            if (definition == null || runState.BuildState.HasClaimedSelectionNode(definition.NodeId))
+            {
+                return false;
+            }
+
             IReadOnlyList<BuildUpgradeDefinition> choices = ChoiceProvider.GetChoices(
                 runState.BuildState.OwnedUpgrades,
-                runState.CurrentLevelIndex,
+                definition,
                 runState.Seed,
                 Mathf.Max(1, choiceCount));
             if (choices.Count == 0)
@@ -46,6 +62,11 @@ namespace DiveProtocol.Builds
             return BuildSelectionUI.GetOrCreate().Show(choices, selectedId =>
             {
                 if (!BuildRunBridge.GrantUpgrade(runState, playerBuild, selectedId))
+                {
+                    return false;
+                }
+
+                if (!runState.BuildState.TryClaimSelectionNode(definition.NodeId))
                 {
                     return false;
                 }

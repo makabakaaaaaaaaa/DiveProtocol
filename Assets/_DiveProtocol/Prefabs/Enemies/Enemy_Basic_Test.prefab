@@ -266,19 +266,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthComponent: {fileID: 3445621593912792408}
-  drops:
-  - prefab: {fileID: 5242961093788642197, guid: 738777e2357865b4f8c8d19b2be3680c, type: 3}
-    chance: 0.45
-    minAmount: 3
-    maxAmount: 6
-  - prefab: {fileID: 8647905702177324986, guid: 945d5c6e37a789149ad0bd53f2bd4962, type: 3}
-    chance: 0.2
-    minAmount: 20
-    maxAmount: 25
-  - prefab: {fileID: 2471316667675073093, guid: 8303198e38ad1d442aed1d9b24e76376, type: 3}
-    chance: 0.1
-    minAmount: 1
-    maxAmount: 1
+  healingDropPrefab: {fileID: 8647905702177324986, guid: 945d5c6e37a789149ad0bd53f2bd4962, type: 3}
+  ammoDropPrefab: {fileID: 5242961093788642197, guid: 738777e2357865b4f8c8d19b2be3680c, type: 3}
+  randomBuildDropPrefab: {fileID: 2471316667675073093, guid: 8303198e38ad1d442aed1d9b24e76376, type: 3}
+  noDropChance: 0.3
+  healingDropChance: 0.3
+  ammoDropChance: 0.25
+  randomBuildDropChance: 0.15
   dropOrigin: {fileID: 0}
   scatterRadius: 0.5
   dropOnlyOnce: 1

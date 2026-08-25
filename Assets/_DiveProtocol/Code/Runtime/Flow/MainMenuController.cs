@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace DiveProtocol
 {
-    /// <summary>Handles the temporary main-menu actions.</summary>
+    /// <summary>Starts new runs from the active main menu.</summary>
     public sealed class MainMenuController : MonoBehaviour
     {
         [SerializeField] private Button _newRunButton;

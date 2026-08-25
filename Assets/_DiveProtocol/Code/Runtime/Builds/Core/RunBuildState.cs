@@ -10,8 +10,20 @@ namespace DiveProtocol.Builds
     public sealed class RunBuildState
     {
         private readonly List<BuildUpgradeId> _ownedUpgrades = new();
+        private readonly HashSet<string> _claimedSelectionNodes = new(StringComparer.Ordinal);
 
         public IReadOnlyCollection<BuildUpgradeId> OwnedUpgrades => _ownedUpgrades;
+
+        public bool HasClaimedSelectionNode(string nodeId)
+        {
+            return !string.IsNullOrWhiteSpace(nodeId) && _claimedSelectionNodes.Contains(nodeId);
+        }
+
+        /// <summary>Claims one configured build node once for this run.</summary>
+        public bool TryClaimSelectionNode(string nodeId)
+        {
+            return !string.IsNullOrWhiteSpace(nodeId) && _claimedSelectionNodes.Add(nodeId);
+        }
 
         public bool HasUpgrade(BuildUpgradeId id)
         {
@@ -53,6 +65,7 @@ namespace DiveProtocol.Builds
         public void Clear()
         {
             _ownedUpgrades.Clear();
+            _claimedSelectionNodes.Clear();
         }
     }
 }

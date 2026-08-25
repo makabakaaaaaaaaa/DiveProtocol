@@ -17,6 +17,12 @@ namespace DiveProtocol.Interaction
         public virtual string InteractionPrompt => interactionPrompt;
 
         /// <summary>
+        /// Indicates whether the shared screen-space interaction prompt should represent this interactable.
+        /// World-space interactables can opt out and provide their own local prompt.
+        /// </summary>
+        public virtual bool UsesScreenPrompt => true;
+
+        /// <summary>
         /// Returns the prompt shown to a specific interactor. Override for player-dependent prompts.
         /// </summary>
         public virtual string GetInteractionPrompt(GameObject interactor)

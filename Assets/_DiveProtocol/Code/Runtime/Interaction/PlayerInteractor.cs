@@ -55,6 +55,9 @@ namespace DiveProtocol.Interaction
         public InteractableBase CurrentInteractable =>
             currentInteractable;
 
+        /// <summary>Returns the configured range used by the shared interaction key.</summary>
+        public float InteractionRadius => interactionRadius;
+
         /// <summary>
         /// 浠ュ悗浜や簰鎻愮ずUI鍙互璁㈤槄杩欎釜浜嬩欢銆?
         /// </summary>

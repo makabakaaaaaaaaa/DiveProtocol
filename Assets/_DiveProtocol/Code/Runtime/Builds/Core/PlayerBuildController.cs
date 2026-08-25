@@ -83,6 +83,12 @@ namespace DiveProtocol.Builds
             return state.HasUpgrade(id);
         }
 
+        /// <summary>Lets branch effects intercept a lethal hit without coupling HealthComponent to a specific build.</summary>
+        public bool TryPreventLethalDamage()
+        {
+            return BloodDebt != null && BloodDebt.TryPreventLethalDamage();
+        }
+
         /// <summary>
         /// Attempts the Red Marrow HP-for-ammo action.
         /// </summary>

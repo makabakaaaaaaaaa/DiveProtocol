@@ -10,10 +10,10 @@ namespace DiveProtocol.Builds
     {
         private const float LockSeconds = 0.8f;
         private const float MarkDurationSeconds = 5f;
+        private const float PersistentMarkDurationSeconds = 8f;
         private const float MarkedDamageMultiplier = 1.15f;
+        private const float DisciplinedMarkedDamageMultiplier = 1.10f;
         private const float MarkAmmoRefundChance = 0.20f;
-        private const float SlowMultiplier = 0.65f;
-        private const float SlowDurationSeconds = 3f;
         private const float VisionBoostSeconds = 2f;
 
         [SerializeField] private LayerMask markMask = ~0;
@@ -25,7 +25,6 @@ namespace DiveProtocol.Builds
         private HealthComponent _candidateTarget;
         private float _candidateStartTime;
         private MarkedTarget _currentMarkedTarget;
-        private readonly JointRuptureTracker _jointRuptureTracker = new();
 
         public event Action<float> VisionBoostTriggered;
 
@@ -80,7 +79,32 @@ namespace DiveProtocol.Builds
 
         public float GetMarkedDamageMultiplier(IDamageable target)
         {
-            return IsMarked(target) ? MarkedDamageMultiplier : 1f;
+            if (!IsMarked(target))
+            {
+                return 1f;
+            }
+
+            float multiplier = MarkedDamageMultiplier;
+            if (_buildController != null && _buildController.HasUpgrade(BuildUpgradeId.OpticNerve_AimDiscipline))
+            {
+                multiplier *= DisciplinedMarkedDamageMultiplier;
+            }
+
+            return multiplier;
+        }
+
+        /// <summary>Consumes the Perfect Prediction opening critical on a currently marked target.</summary>
+        public bool TryConsumePerfectPrediction(IDamageable target)
+        {
+            if (_buildController == null ||
+                !_buildController.HasUpgrade(BuildUpgradeId.OpticNerve_PerfectPrediction) ||
+                target is not Component component)
+            {
+                return false;
+            }
+
+            MarkedTarget marker = component.GetComponent<MarkedTarget>();
+            return marker != null && marker.TryConsumeFirstHitCritical(gameObject);
         }
 
         private void UpdateMarkCandidate()
@@ -144,7 +168,15 @@ namespace DiveProtocol.Builds
                 marker = target.gameObject.AddComponent<MarkedTarget>();
             }
 
-            marker.Mark(gameObject, MarkDurationSeconds);
+            if (marker.IsMarkedBy(gameObject))
+            {
+                return;
+            }
+
+            float duration = _buildController != null && _buildController.HasUpgrade(BuildUpgradeId.OpticNerve_MarkPersistence)
+                ? PersistentMarkDurationSeconds
+                : MarkDurationSeconds;
+            marker.Mark(gameObject, duration);
             _currentMarkedTarget = marker;
         }
 
@@ -158,13 +190,6 @@ namespace DiveProtocol.Builds
             if (HasCore && IsMarked(hitInfo.Target) && UnityEngine.Random.value <= MarkAmmoRefundChance)
             {
                 _weapon.TryAddAmmo(1);
-            }
-
-            if (_buildController.HasUpgrade(BuildUpgradeId.OpticNerve_JointRupture) &&
-                _jointRuptureTracker.RegisterHit(hitInfo.Target) &&
-                hitInfo.Target is Component targetComponent)
-            {
-                TemporaryEnemySlow.Apply(targetComponent.gameObject, SlowMultiplier, SlowDurationSeconds);
             }
 
             if (_buildController.HasUpgrade(BuildUpgradeId.OpticNerve_MarkRecycle) &&

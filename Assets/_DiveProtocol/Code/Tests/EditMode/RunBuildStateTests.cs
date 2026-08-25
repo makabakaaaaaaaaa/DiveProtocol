@@ -17,6 +17,21 @@ namespace DiveProtocol.Tests.EditMode
             state.Clear();
 
             Assert.That(state.OwnedUpgrades, Is.Empty);
+            Assert.That(state.HasClaimedSelectionNode("node-a"), Is.False);
+        }
+
+        [Test]
+        public void FixedSelectionNodeCanOnlyBeClaimedOncePerRun()
+        {
+            var state = new RunBuildState();
+
+            Assert.That(state.TryClaimSelectionNode("node-a"), Is.True);
+            Assert.That(state.TryClaimSelectionNode("node-a"), Is.False);
+            Assert.That(state.HasClaimedSelectionNode("node-a"), Is.True);
+
+            state.Clear();
+
+            Assert.That(state.HasClaimedSelectionNode("node-a"), Is.False);
         }
     }
 }

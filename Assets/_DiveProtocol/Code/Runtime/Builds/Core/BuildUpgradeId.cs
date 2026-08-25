@@ -10,17 +10,26 @@ namespace DiveProtocol.Builds
         RedMarrow_ExcessAdrenaline,
         RedMarrow_BloodBulletCompression,
         RedMarrow_OrganCollateral,
+        RedMarrow_BloodEconomy,
+        RedMarrow_LowHealthAmplifier,
+        RedMarrow_SacrificeProtocol,
 
         OpticNerve_Calibration,
         OpticNerve_CalmShot,
         OpticNerve_JointRupture,
         OpticNerve_MarkRecycle,
         OpticNerve_SafeDistance,
+        OpticNerve_MarkPersistence,
+        OpticNerve_AimDiscipline,
+        OpticNerve_PerfectPrediction,
 
         Humus_Sympathy,
         Humus_DeadMatterWhisper,
         Humus_PollutionCoat,
         Humus_CadaverDelay,
-        Humus_AbnormalMetabolism
+        Humus_AbnormalMetabolism,
+        Humus_ExpandedVessel,
+        Humus_EnvironmentalTolerance,
+        Humus_CompleteSymbiosis
     }
 }

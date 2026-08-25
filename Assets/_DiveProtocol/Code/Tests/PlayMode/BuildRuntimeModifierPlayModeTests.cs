@@ -21,7 +21,7 @@ namespace DiveProtocol.Tests.PlayMode
                 controller.GrantUpgrade(BuildUpgradeId.RedMarrow_Overdraft);
                 health.TakeDamage(new DamageInfo(70f, null, Vector3.zero, Vector3.zero));
 
-                Assert.That(controller.Modifiers.GetMoveSpeedMultiplier(), Is.EqualTo(1.12f).Within(0.001f));
+                Assert.That(controller.Modifiers.GetMoveSpeedMultiplier(), Is.EqualTo(1.15f).Within(0.001f));
                 Assert.That(
                     controller.Modifiers.GetOutgoingGunDamageMultiplier(null, default),
                     Is.EqualTo(1.20f).Within(0.001f));

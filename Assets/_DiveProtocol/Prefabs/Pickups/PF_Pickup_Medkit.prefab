@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8987038323049470207}
   - component: {fileID: 208992560950310212}
   - component: {fileID: 4818720531535042574}
-  - component: {fileID: 4845152553415783397}
-  m_Layer: 0
+  - component: {fileID: 5836538322271930409}
+  - component: {fileID: 6378503400252289706}
+  m_Layer: 8
   m_Name: PF_Pickup_Medkit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +110,34 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4845152553415783397
+--- !u!54 &5836538322271930409
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8647905702177324986}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &6378503400252289706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,12 +146,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8647905702177324986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba885503776f9cd49b2202019f821256, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b91a7e9e0b768b49a10c3e304d56d72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactionPrompt: Interact
-  pickupType: 1
-  amount: 25
-  buildPartItemId: BUILD_PART
-  deactivateAfterPickup: 1
-  pickupPrompt: Pick up Medkit
+  _dropType: 0
+  _amount: 15

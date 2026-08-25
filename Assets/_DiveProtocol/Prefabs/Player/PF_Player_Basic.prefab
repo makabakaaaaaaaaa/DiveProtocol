@@ -819,6 +819,11 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  gunshotAudioSource: {fileID: 0}
+  gunshotClip: {fileID: 0}
+  gunshotVolume: 0.35
+  gunshotPitchMin: 0.98
+  gunshotPitchMax: 1.02
   useSphereCast: 1
   hitRadius: 0.3
   triggerInteraction: 1

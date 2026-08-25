@@ -109,6 +109,13 @@ namespace DiveProtocol.Interaction
                 return;
             }
 
+            if (!interactable.UsesScreenPrompt)
+            {
+                currentPrompt = null;
+                SetPromptVisible(false);
+                return;
+            }
+
             if (promptText == null)
             {
                 Debug.LogError(

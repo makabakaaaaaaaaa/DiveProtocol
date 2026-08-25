@@ -60,6 +60,9 @@ namespace DiveProtocol
             }
 
             _isLoading = true;
+            LoadingScreenOverlayService.Show(
+                profile.TransitionTitle,
+                profile.TransitionDescription);
             ApplyText(profile);
             PreparePresentation(profile);
             SetProgress(0f);
@@ -70,6 +73,7 @@ namespace DiveProtocol
                 Debug.LogError($"[Transition] Failed to start async load for scene '{profile.TargetSceneName}'.");
                 SceneTransitionContext.Clear();
                 SceneTransitionService.ResetRequestGuard();
+                LoadingScreenOverlayService.Hide();
                 _isLoading = false;
                 yield break;
             }
@@ -89,6 +93,7 @@ namespace DiveProtocol
             SetProgress(1f);
             SceneTransitionContext.Clear();
             SceneTransitionService.ResetRequestGuard();
+            LoadingScreenOverlayService.HideAfterNextSceneActivation();
             operation.allowSceneActivation = true;
         }
 
@@ -160,6 +165,8 @@ namespace DiveProtocol
                 int percent = Mathf.RoundToInt(clampedProgress * 100f);
                 progressText.text = $"{percent}%";
             }
+
+            LoadingScreenOverlayService.SetProgress(clampedProgress);
         }
 
         private void HandleMissingPendingProfile()

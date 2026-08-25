@@ -22,7 +22,7 @@ namespace DiveProtocol.Builds
 
         public override bool CanInteract(GameObject interactor)
         {
-            return base.CanInteract(interactor) && !_hasBeenUsed && !GameplayInputLock.IsLocked;
+            return base.CanInteract(interactor) && !HasBeenUsedThisRun() && !GameplayInputLock.IsLocked;
         }
 
         public override void Interact(GameObject interactor)
@@ -51,10 +51,42 @@ namespace DiveProtocol.Builds
                 return;
             }
 
-            if (!BuildSelectionFlow.TryOpen(interactor, _choiceCount, HandleSelectionCompleted))
+            if (!LevelBuildSelectionCatalog.TryGetForActiveScene(out LevelBuildSelectionDefinition definition) ||
+                !BuildSelectionFlow.TryOpen(interactor, definition, _choiceCount, HandleSelectionCompleted))
             {
                 return;
             }
+        }
+
+        private void Update()
+        {
+            if (!_activateOnPlayerEnter || HasBeenUsedThisRun() || GameplayInputLock.IsLocked ||
+                !TryGetComponent(out Collider triggerCollider) || !triggerCollider.enabled)
+            {
+                return;
+            }
+
+            PlayerInteractor playerInteractor = FindFirstObjectByType<PlayerInteractor>();
+            Collider playerCollider = playerInteractor != null
+                ? playerInteractor.GetComponent<Collider>() ?? playerInteractor.GetComponentInChildren<Collider>()
+                : null;
+            if (playerCollider != null && triggerCollider.bounds.Intersects(playerCollider.bounds))
+            {
+                TryOpenSelection(playerInteractor.gameObject);
+            }
+        }
+
+        private bool HasBeenUsedThisRun()
+        {
+            if (_hasBeenUsed)
+            {
+                return true;
+            }
+
+            return AppRoot.TryGetInstance(out AppRoot appRoot) &&
+                   appRoot.RunManager.CurrentRun != null &&
+                   LevelBuildSelectionCatalog.TryGetForActiveScene(out LevelBuildSelectionDefinition definition) &&
+                   appRoot.RunManager.CurrentRun.BuildState.HasClaimedSelectionNode(definition.NodeId);
         }
 
         private void HandleSelectionCompleted()

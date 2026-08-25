@@ -4,7 +4,7 @@ namespace DiveProtocol
     public static class SceneNames
     {
         public const string Bootstrap = "SCN_Bootstrap";
-        public const string MainMenu = "SCN_MainMenu";
+        public const string MainMenu = "MainMenu_Facility";
         public const string Level01Drainage = "SCN_L01_Drainage";
         public const string Level02Containment = "SCN_L02_Containment";
         public const string Level03MaintenanceTransfer = "SCN_L03_MaintenanceTransfer";

@@ -6,13 +6,13 @@ namespace DiveProtocol.Editor
 {
     internal static class BuildSceneConfiguration
     {
-        private const string _systemFolder = "Assets/_DiveProtocol/Scenes/System";
+        private const string _systemFolder = "Assets/_DiveProtocol/Scenes/Levels/System";
         private const string _levelsFolder = "Assets/_DiveProtocol/Scenes/Levels";
 
         internal static readonly string[] CoreBuildScenePaths =
         {
             $"{_systemFolder}/{SceneNames.Bootstrap}.unity",
-            $"{_systemFolder}/{SceneNames.MainMenu}.unity",
+            $"{_levelsFolder}/{SceneNames.MainMenu}.unity",
             $"{_levelsFolder}/SCN_Loading.unity",
             $"{_levelsFolder}/{SceneNames.Level02Containment}.unity",
             $"{_levelsFolder}/{SceneNames.Level01Drainage}.unity",

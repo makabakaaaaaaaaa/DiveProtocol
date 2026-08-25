@@ -92,11 +92,121 @@ namespace DiveProtocol.Builds
             return choices;
         }
 
+        /// <summary>Returns unowned branch components eligible for a random enemy minor-build drop.</summary>
+        public IReadOnlyList<BuildUpgradeDefinition> GetMinorUpgradeCandidates(
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades)
+        {
+            if (ownedUpgrades == null || !HasAnyCore(ownedUpgrades))
+            {
+                return Array.Empty<BuildUpgradeDefinition>();
+            }
+
+            BuildBranch branch = GetOwnedCoreBranch(ownedUpgrades);
+            return BuildCatalog.AllDefinitions
+                .Where(definition =>
+                    !ownedUpgrades.Contains(definition.Id) &&
+                    definition.Branch == branch &&
+                    IsMinorDropEligible(definition))
+                .ToArray();
+        }
+
+        /// <summary>Chooses one unowned, non-core, non-awakening component for a random enemy drop.</summary>
+        public BuildUpgradeDefinition GetRandomMinorUpgrade(
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades,
+            int seed)
+        {
+            IReadOnlyList<BuildUpgradeDefinition> candidates = GetMinorUpgradeCandidates(ownedUpgrades);
+            if (candidates.Count == 0)
+            {
+                return null;
+            }
+
+            var random = new System.Random(seed);
+            return candidates[random.Next(candidates.Count)];
+        }
+
+        /// <summary>Generates a fixed level-node offer for the branch already chosen in this run.</summary>
+        public IReadOnlyList<BuildUpgradeDefinition> GetChoices(
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades,
+            LevelBuildSelectionDefinition definition,
+            int seed,
+            int choiceCount = 3)
+        {
+            if (definition == null)
+            {
+                return Array.Empty<BuildUpgradeDefinition>();
+            }
+
+            if (ownedUpgrades == null || !HasAnyCore(ownedUpgrades))
+            {
+                return GetCoreChoices(ownedUpgrades, choiceCount);
+            }
+
+            BuildBranch branch = GetOwnedCoreBranch(ownedUpgrades);
+            var choices = new List<BuildUpgradeDefinition>();
+            AddFromPool(choices, definition.PrimaryPool, ownedUpgrades, branch, seed, definition.ProgressionIndex, choiceCount);
+            AddFromPool(choices, definition.FallbackPool, ownedUpgrades, branch, seed ^ 0x5F3759DF, definition.ProgressionIndex, choiceCount);
+            return choices;
+        }
+
         private static bool HasAnyCore(IReadOnlyCollection<BuildUpgradeId> ownedUpgrades)
         {
             return HasBranchCore(ownedUpgrades, BuildBranch.RedMarrow) ||
                    HasBranchCore(ownedUpgrades, BuildBranch.OpticNerve) ||
                    HasBranchCore(ownedUpgrades, BuildBranch.HumusSymbiosis);
+        }
+
+        private static IReadOnlyList<BuildUpgradeDefinition> GetCoreChoices(
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades,
+            int choiceCount)
+        {
+            var choices = new List<BuildUpgradeDefinition>();
+            for (int index = 0; index < CoreChoices.Length && choices.Count < Mathf.Max(1, choiceCount); index++)
+            {
+                if (ownedUpgrades == null || !ownedUpgrades.Contains(CoreChoices[index]))
+                {
+                    choices.Add(BuildCatalog.Get(CoreChoices[index]));
+                }
+            }
+
+            return choices;
+        }
+
+        private static BuildBranch GetOwnedCoreBranch(IReadOnlyCollection<BuildUpgradeId> ownedUpgrades)
+        {
+            foreach (BuildBranch branch in (BuildBranch[])Enum.GetValues(typeof(BuildBranch)))
+            {
+                if (HasBranchCore(ownedUpgrades, branch)) return branch;
+            }
+
+            return BuildBranch.RedMarrow;
+        }
+
+        private static void AddFromPool(
+            List<BuildUpgradeDefinition> destination,
+            IReadOnlyList<BuildUpgradeId> pool,
+            IReadOnlyCollection<BuildUpgradeId> ownedUpgrades,
+            BuildBranch branch,
+            int seed,
+            int levelIndex,
+            int choiceCount)
+        {
+            if (pool == null || destination.Count >= choiceCount) return;
+
+            var candidates = new List<BuildUpgradeDefinition>();
+            foreach (BuildUpgradeId id in pool)
+            {
+                if (ownedUpgrades.Contains(id) || !BuildCatalog.TryGet(id, out BuildUpgradeDefinition definition) ||
+                    definition.Branch != branch || destination.Any(choice => choice.Id == id))
+                {
+                    continue;
+                }
+
+                candidates.Add(definition);
+            }
+
+            Shuffle(candidates, seed, levelIndex);
+            AddUntilFull(destination, candidates, choiceCount);
         }
 
         private static bool HasBranchCore(
@@ -114,6 +224,17 @@ namespace DiveProtocol.Builds
             }
 
             return false;
+        }
+
+        private static bool IsMinorDropEligible(BuildUpgradeDefinition definition)
+        {
+            if (definition == null || definition.Kind != BuildUpgradeKind.Component || definition.Tier is < 1 or > 2)
+            {
+                return false;
+            }
+
+            // The current weapon has no reload action yet, so this modifier cannot create an immediate pickup effect.
+            return definition.Id != BuildUpgradeId.OpticNerve_CalmShot;
         }
 
         private static void AddUntilFull(

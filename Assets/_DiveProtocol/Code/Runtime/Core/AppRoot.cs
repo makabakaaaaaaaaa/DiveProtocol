@@ -84,7 +84,10 @@ namespace DiveProtocol
 
         private void Start()
         {
-            if (IsReady && !_sceneLoader.LoadScene(SceneNames.MainMenu, GameState.MainMenu))
+            if (IsReady && !_sceneLoader.LoadScene(
+                    SceneNames.MainMenu,
+                    GameState.MainMenu,
+                    showLoadingOverlay: false))
             {
                 Debug.LogError("Bootstrap failed to begin loading the main menu.");
             }

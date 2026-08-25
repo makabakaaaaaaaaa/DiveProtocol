@@ -234,6 +234,16 @@ namespace DiveProtocol
                         damageInfo.HitDirection,
                         damageInfo.DamageType);
                 }
+
+                if (damageInfo.Amount >= _currentHealth && buildController.TryPreventLethalDamage())
+                {
+                    damageInfo = new DamageInfo(
+                        Mathf.Max(0f, _currentHealth - 1f),
+                        damageInfo.Source,
+                        damageInfo.HitPoint,
+                        damageInfo.HitDirection,
+                        damageInfo.DamageType);
+                }
             }
 
             float previousHealth = _currentHealth;

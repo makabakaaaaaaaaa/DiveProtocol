@@ -1,19 +1,31 @@
-using DiveProtocol.Pickups;
+using DiveProtocol.Builds;
 using UnityEngine;
 
 namespace DiveProtocol.Loot
 {
     /// <summary>
-    /// Drops simple run resources once when an enemy HealthComponent dies.
+    /// Rolls at most one Roguelite drop once when an enemy HealthComponent dies.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class EnemyLootDropper : MonoBehaviour
     {
+        private static readonly BuildChoiceProvider ChoiceProvider = new();
+
         [Header("Health")]
         [SerializeField] private HealthComponent healthComponent;
 
-        [Header("Drops")]
-        [SerializeField] private LootDropEntry[] drops;
+        [Header("Roguelite Drop Prefabs")]
+        [SerializeField] private GameObject healingDropPrefab;
+        [SerializeField] private GameObject ammoDropPrefab;
+        [SerializeField] private GameObject randomBuildDropPrefab;
+
+        [Header("Normal Enemy Probabilities")]
+        [SerializeField, Range(0f, 1f)] private float noDropChance = 0.30f;
+        [SerializeField, Range(0f, 1f)] private float healingDropChance = 0.30f;
+        [SerializeField, Range(0f, 1f)] private float ammoDropChance = 0.25f;
+        [SerializeField, Range(0f, 1f)] private float randomBuildDropChance = 0.15f;
+
+        [Header("Placement")]
         [SerializeField] private Transform dropOrigin;
         [SerializeField, Min(0f)] private float scatterRadius = 0.5f;
         [SerializeField] private bool dropOnlyOnce = true;
@@ -83,49 +95,91 @@ namespace DiveProtocol.Loot
 
             _hasDropped = true;
 
-            if (drops == null || drops.Length == 0)
+            if (!TryRollDrop(Random.value, out DropItemType dropType))
+            {
+                return;
+            }
+
+            if (dropType == DropItemType.RandomBuildDrop && !HasAvailableMinorBuild())
             {
                 return;
             }
 
             Vector3 basePosition = dropOrigin != null ? dropOrigin.position : transform.position;
-
-            for (int i = 0; i < drops.Length; i++)
+            Vector2 scatter = scatterRadius > 0f ? Random.insideUnitCircle * scatterRadius : Vector2.zero;
+            Vector3 dropPosition = basePosition + new Vector3(scatter.x, 0.15f, scatter.y);
+            GameObject prefab = GetPrefab(dropType);
+            if (prefab == null)
             {
-                LootDropEntry entry = drops[i];
-                if (entry == null ||
-                    entry.prefab == null ||
-                    entry.chance <= 0f ||
-                    Random.value > entry.chance)
-                {
-                    continue;
-                }
-
-                int minAmount = Mathf.Max(1, entry.minAmount);
-                int maxAmount = Mathf.Max(minAmount, entry.maxAmount);
-                int amount = Random.Range(minAmount, maxAmount + 1);
-                Vector2 scatter = scatterRadius > 0f ? Random.insideUnitCircle * scatterRadius : Vector2.zero;
-                Vector3 dropPosition = basePosition + new Vector3(scatter.x, 0.15f, scatter.y);
-
-                GameObject droppedObject = Instantiate(
-                    entry.prefab,
-                    dropPosition,
-                    Quaternion.identity);
-
-                if (droppedObject.TryGetComponent(out ResourcePickupInteractable pickup))
-                {
-                    pickup.SetAmount(amount);
-                }
-                else
-                {
-                    ResourcePickupInteractable childPickup =
-                        droppedObject.GetComponentInChildren<ResourcePickupInteractable>(true);
-                    if (childPickup != null)
-                    {
-                        childPickup.SetAmount(amount);
-                    }
-                }
+                Debug.LogWarning($"[Loot] {name} rolled {dropType}, but no matching pickup prefab is configured.", this);
+                return;
             }
+
+            Instantiate(prefab, dropPosition, Quaternion.identity);
+        }
+
+        /// <summary>Maps a normalized roll to the normal-enemy 30/30/25/15 drop table.</summary>
+        public bool TryRollDrop(float roll, out DropItemType dropType)
+        {
+            roll = Mathf.Clamp01(roll);
+            float threshold = noDropChance;
+            if (roll < threshold)
+            {
+                dropType = default;
+                return false;
+            }
+
+            threshold += healingDropChance;
+            if (roll < threshold)
+            {
+                dropType = DropItemType.HealingDrop;
+                return true;
+            }
+
+            threshold += ammoDropChance;
+            if (roll < threshold)
+            {
+                dropType = DropItemType.AmmoDrop;
+                return true;
+            }
+
+            dropType = DropItemType.RandomBuildDrop;
+            return roll < threshold + randomBuildDropChance;
+        }
+
+        /// <summary>Assigns the fixed normal-enemy table and its three configured pickup prefabs.</summary>
+        public void ConfigureRogueliteDrops(
+            GameObject healingPrefab,
+            GameObject ammoPrefab,
+            GameObject buildPrefab)
+        {
+            healingDropPrefab = healingPrefab;
+            ammoDropPrefab = ammoPrefab;
+            randomBuildDropPrefab = buildPrefab;
+            noDropChance = 0.30f;
+            healingDropChance = 0.30f;
+            ammoDropChance = 0.25f;
+            randomBuildDropChance = 0.15f;
+        }
+
+        private GameObject GetPrefab(DropItemType dropType)
+        {
+            return dropType switch
+            {
+                DropItemType.HealingDrop => healingDropPrefab,
+                DropItemType.AmmoDrop => ammoDropPrefab,
+                DropItemType.RandomBuildDrop => randomBuildDropPrefab,
+                _ => null
+            };
+        }
+
+        private static bool HasAvailableMinorBuild()
+        {
+            return AppRoot.TryGetInstance(out AppRoot appRoot) &&
+                   appRoot.RunManager.CurrentRun != null &&
+                   appRoot.RunManager.CurrentRun.IsActive &&
+                   ChoiceProvider.GetMinorUpgradeCandidates(
+                       appRoot.RunManager.CurrentRun.BuildState.OwnedUpgrades).Count > 0;
         }
 
 #if UNITY_EDITOR
@@ -133,23 +187,10 @@ namespace DiveProtocol.Loot
         {
             scatterRadius = Mathf.Max(0f, scatterRadius);
 
-            if (drops == null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < drops.Length; i++)
-            {
-                LootDropEntry entry = drops[i];
-                if (entry == null)
-                {
-                    continue;
-                }
-
-                entry.chance = Mathf.Clamp01(entry.chance);
-                entry.minAmount = Mathf.Max(1, entry.minAmount);
-                entry.maxAmount = Mathf.Max(entry.minAmount, entry.maxAmount);
-            }
+            noDropChance = Mathf.Clamp01(noDropChance);
+            healingDropChance = Mathf.Clamp01(healingDropChance);
+            ammoDropChance = Mathf.Clamp01(ammoDropChance);
+            randomBuildDropChance = Mathf.Clamp01(randomBuildDropChance);
         }
 #endif
     }
